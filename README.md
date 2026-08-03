@@ -13,6 +13,7 @@ npm run dev
 ## Pages
 
 - **Today** — calendar + cosmic strip + phase cards (Morning / Day / Night / Summary)
+- **Notes** — freeform spiritual notes with search and autosave
 - **Psyche** — personal profile, Chaldean numerology, natal chart, planetary hours, daily tarot, life stages, pattern analysis
 - **Search** — Glorian guidance + search your entries
 - **Trends** — awareness, defects, practice at a glance

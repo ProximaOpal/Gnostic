@@ -77,8 +77,8 @@ img{max-width:100%;display:block}
 .top .who{display:flex;align-items:center;gap:8px;font-size:.9rem;color:var(--ink2)}
 .top .who img,.top .who .avatar{width:34px;height:34px;border-radius:50%}
 .wrap{max-width:920px;margin:0 auto;padding:18px 18px 40px}
-.nav{position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--nav-bg);backdrop-filter:blur(16px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding:8px 6px calc(8px + env(safe-area-inset-bottom))}
-.nav button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px;border-radius:14px;color:var(--mute);font-size:.68rem;letter-spacing:.04em;text-transform:uppercase}
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--nav-bg);backdrop-filter:blur(16px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(6,1fr);padding:8px 4px calc(8px + env(safe-area-inset-bottom))}
+.nav button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;border-radius:14px;color:var(--mute);font-size:.62rem;letter-spacing:.04em;text-transform:uppercase}
 .nav button.on{color:var(--leaf2);background:rgba(47,107,79,.08)}
 .nav .icon{width:1.55rem;height:1.55rem}
 
@@ -268,8 +268,25 @@ img{max-width:100%;display:block}
 .ob-dots i{flex:1;height:3px;border-radius:2px;background:var(--line)}
 .ob-dots i.on{background:var(--leaf)}
 .arcana-mini{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:6px}
-.arcana-mini button{padding:8px 4px;border-radius:12px;border:1px solid var(--line);background:#fff;font-size:.65rem;color:var(--mute)}
+.arcana-mini button{padding:8px 4px;border-radius:12px;border:1px solid var(--line);background:var(--field-bg);font-size:.65rem;color:var(--mute)}
 .arcana-mini .ae{font-size:1.2rem;display:block}
+
+/* NOTES */
+.notes-layout{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:800px){.notes-layout{grid-template-columns:340px 1fr;align-items:start}}
+.notes-list{display:flex;flex-direction:column;gap:8px;max-height:min(70vh,640px);overflow:auto}
+.note-item{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;text-align:left;width:100%;padding:12px;border-radius:16px;border:1px solid var(--line);background:var(--card);cursor:pointer;color:inherit}
+.note-item.on{border-color:var(--leaf);background:rgba(47,107,79,.08)}
+.note-item .ni{width:44px;height:44px;border-radius:14px;background:rgba(47,107,79,.1);display:grid;place-items:center}
+.note-item h4{font-size:.95rem;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.note-item p{font-size:.78rem;color:var(--mute);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.note-item time{font-size:.68rem;color:var(--mute);white-space:nowrap}
+.note-editor{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px;min-height:420px;display:flex;flex-direction:column}
+.note-editor .note-title{width:100%;border:none;background:transparent;font-family:var(--serif);font-size:1.5rem;outline:none;margin-bottom:8px;color:var(--ink)}
+.note-editor .note-body{width:100%;flex:1;border:none;background:transparent;resize:vertical;min-height:280px;outline:none;font-size:1rem;line-height:1.6;color:var(--ink)}
+.note-editor .note-meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.note-empty{text-align:center;padding:40px 16px;color:var(--mute)}
+.note-empty .icon-xl{margin-bottom:10px}
 </style>
 </head>
 <body>
@@ -651,6 +668,43 @@ img{max-width:100%;display:block}
     </div>
   </div>
 
+  <!-- NOTES -->
+  <div id="view-notes" class="view">
+    <div class="wrap">
+      <div class="section-title"><span class="iconify icon-xl" data-icon="fluent-emoji:spiral-notepad"></span> Notes</div>
+      <div class="btn-row" style="margin-bottom:14px">
+        <button class="btn btn-primary" style="width:auto" id="btn-note-new"><span class="iconify icon" data-icon="fluent-emoji:pencil"></span> New note</button>
+      </div>
+      <div class="search-box" style="margin-bottom:14px">
+        <span class="iconify icon sico" data-icon="fluent-emoji:magnifying-glass-tilted-left"></span>
+        <input id="notes-q" placeholder="Search notes…" autocomplete="off">
+      </div>
+      <div class="notes-layout">
+        <div>
+          <div class="notes-list" id="notes-list"></div>
+        </div>
+        <div class="note-editor" id="note-editor">
+          <div class="note-empty" id="note-empty">
+            <span class="iconify icon-xl" data-icon="fluent-emoji:spiral-notepad"></span>
+            <p>Select a note or write a new one.</p>
+          </div>
+          <div id="note-form" class="hidden" style="display:flex;flex-direction:column;flex:1">
+            <input class="note-title" id="note-title" placeholder="Title">
+            <textarea class="note-body" id="note-body" placeholder="Observations, insights, teachings…"></textarea>
+            <div class="field" style="margin:0">
+              <label>Tag</label>
+              <input id="note-tag" placeholder="dream · study · insight · vow…">
+            </div>
+            <div class="note-meta">
+              <span class="pill" id="note-saved"><span class="iconify icon" data-icon="fluent-emoji:floppy-disk"></span> Autosave</span>
+              <button class="btn btn-ghost" type="button" id="btn-note-del"><span class="iconify icon" data-icon="fluent-emoji:wastebasket"></span> Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- YOU -->
   <div id="view-you" class="view">
     <div class="wrap">
@@ -670,6 +724,7 @@ img{max-width:100%;display:block}
 
   <nav class="nav">
     <button data-view="today" class="on"><span class="iconify icon" data-icon="fluent-emoji:spiral-calendar"></span>Today</button>
+    <button data-view="notes"><span class="iconify icon" data-icon="fluent-emoji:spiral-notepad"></span>Notes</button>
     <button data-view="psyche"><span class="iconify icon" data-icon="fluent-emoji:crystal-ball"></span>Psyche</button>
     <button data-view="search"><span class="iconify icon" data-icon="fluent-emoji:magnifying-glass-tilted-right"></span>Search</button>
     <button data-view="trends"><span class="iconify icon" data-icon="fluent-emoji:chart-increasing"></span>Trends</button>
@@ -901,13 +956,13 @@ document.getElementById('btn-signup').onclick=async()=>{
   const f=document.getElementById('su-photo').files?.[0];
   if(f) avatar=await fileToData(f);
   const id=uid();
-  state.users[id]={id,name,pass:hash(pass),avatar,ledger:{},profile:{fullName:name},createdAt:Date.now()};
+  state.users[id]={id,name,pass:hash(pass),avatar,ledger:{},notes:[],profile:{fullName:name},createdAt:Date.now()};
   save(); enter(id); setTimeout(openOnboarding,600);
 };
 function fileToData(f){return new Promise(res=>{const r=new FileReader();r.onload=()=>res(r.result);r.readAsDataURL(f);});}
 function enter(id){
   state.active=id; save();
-  const u=user(); if(u&&!u.profile) u.profile={};
+  const u=user(); if(u&&!u.profile) u.profile={}; if(u&&!Array.isArray(u.notes)) u.notes=[];
   document.getElementById('auth').style.display='none';
   document.getElementById('app').style.display='block';
   paintWho(); renderDateStrip(); paintPhases(); fillForms(); renderGuides(); renderCosmicStrip();
@@ -937,14 +992,15 @@ document.querySelectorAll('.nav [data-view]').forEach(b=>b.onclick=()=>showView(
 document.querySelectorAll('.phase').forEach(b=>b.onclick=()=>showView(b.dataset.phase));
 function showView(name){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
-  const map={today:'view-today',morning:'view-morning',day:'view-day',night:'view-night',summary:'view-summary',search:'view-search',trends:'view-trends',you:'view-you',psyche:'view-psyche'};
+  const map={today:'view-today',morning:'view-morning',day:'view-day',night:'view-night',summary:'view-summary',search:'view-search',trends:'view-trends',you:'view-you',psyche:'view-psyche',notes:'view-notes'};
   document.getElementById(map[name]||'view-today').classList.add('on');
-  const navs=['today','psyche','search','trends','you'];
+  const navs=['today','notes','psyche','search','trends','you'];
   document.querySelectorAll('.nav [data-view]').forEach(b=>b.classList.toggle('on',navs.includes(name)&&b.dataset.view===name));
   if(['morning','day','night','summary'].includes(name)) fillForms();
   if(name==='trends') renderTrends();
   if(name==='search') runSearch();
   if(name==='psyche') renderPsyche();
+  if(name==='notes') renderNotes();
   if(name==='today') renderCosmicStrip();
   window.scrollTo({top:0,behavior:'smooth'});
 }
@@ -1276,11 +1332,14 @@ function runSearch(){
     const blob=JSON.stringify(row).toLowerCase();
     if(blob.includes(q)||date.includes(q)) hits.push({date,row});
   });
+  const noteHits=(u.notes||[]).filter(n=>`${n.title} ${n.body} ${n.tag}`.toLowerCase().includes(q));
   const pblob=JSON.stringify(u.profile||{}).toLowerCase();
   hits.sort((a,b)=>b.date.localeCompare(a.date));
   const psycheHit=psycheQ.includes(q)||pblob.includes(q)||'chaldean personal year'.includes(q);
   box.innerHTML=`
     ${psycheHit?`<button class="result" data-go="psyche"><div class="thumb" style="display:grid;place-items:center;background:#dfe5d8"><span class="iconify icon-lg" data-icon="fluent-emoji:crystal-ball"></span></div><div><h4>Psyche intelligence</h4><p>Numerology, planets, tarot, self-portrait</p></div></button>`:''}
+    ${noteHits.length?`<p class="pill" style="margin-bottom:10px"><span class="iconify icon" data-icon="fluent-emoji:spiral-notepad"></span> Notes · ${noteHits.length}</p>`+noteHits.slice(0,10).map(n=>`
+      <button class="result" data-note="${n.id}"><div class="thumb" style="display:grid;place-items:center;background:#dfe5d8"><span class="iconify icon-lg" data-icon="fluent-emoji:memo"></span></div><div><h4>${esc(n.title||'Untitled')}</h4><p>${esc((n.body||'').slice(0,100))}</p></div></button>`).join(''):''}
     ${glorianHits.length?`<p class="pill" style="margin-bottom:10px"><span class="iconify icon" data-icon="fluent-emoji:open-book"></span> Glorian</p>`+glorianHits.map(g=>`
       <button class="result" data-go="${g.id}"><div class="thumb" style="background-image:${g.bg};background-size:cover"></div><div><h4>${g.title}</h4><p>Open this phase</p></div></button>`).join(''):''}
     <p class="pill" style="margin:12px 0 10px"><span class="iconify icon" data-icon="fluent-emoji:spiral-notepad"></span> Entries · ${hits.length}</p>
@@ -1291,6 +1350,7 @@ function runSearch(){
       </button>`).join('')||'<p class="hint">No ledger matches.</p>'}`;
   scan(box);
   box.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>showView(b.dataset.go));
+  box.querySelectorAll('[data-note]').forEach(b=>b.onclick=()=>{activeNoteId=b.dataset.note;showView('notes');});
   box.querySelectorAll('[data-date]').forEach(b=>b.onclick=()=>{activeDate=b.dataset.date;renderDateStrip();paintPhases();showView('today');});
 }
 function snippet(row,q){
@@ -1299,6 +1359,88 @@ function snippet(row,q){
   if(i<0) return vals.slice(0,120)||'Logged day';
   return vals.slice(Math.max(0,i-40),i+80);
 }
+
+/* NOTES */
+let activeNoteId = null;
+let noteSaveTimer = null;
+function notesArr(){const u=user(); if(!u) return []; if(!Array.isArray(u.notes)) u.notes=[]; return u.notes;}
+function renderNotes(){
+  const q=(document.getElementById('notes-q')?.value||'').trim().toLowerCase();
+  const list=document.getElementById('notes-list');
+  const notes=[...notesArr()].sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0))
+    .filter(n=>!q||`${n.title} ${n.body} ${n.tag}`.toLowerCase().includes(q));
+  if(!notes.length){
+    list.innerHTML=`<div class="card hint" style="text-align:center">No notes yet. Tap <strong>New note</strong>.</div>`;
+  } else {
+    list.innerHTML=notes.map(n=>`
+      <button type="button" class="note-item ${n.id===activeNoteId?'on':''}" data-nid="${n.id}">
+        <div class="ni"><span class="iconify icon" data-icon="fluent-emoji:memo"></span></div>
+        <div>
+          <h4>${esc(n.title||'Untitled')}</h4>
+          <p>${esc((n.body||'').slice(0,100)||n.tag||'Empty note')}</p>
+        </div>
+        <time>${n.updatedAt?new Date(n.updatedAt).toLocaleDateString(undefined,{month:'short',day:'numeric'}):''}</time>
+      </button>`).join('');
+    scan(list);
+    list.querySelectorAll('[data-nid]').forEach(b=>b.onclick=()=>openNote(b.dataset.nid));
+  }
+  if(activeNoteId && notesArr().some(n=>n.id===activeNoteId)) openNote(activeNoteId,true);
+  else showNoteEmpty();
+}
+function showNoteEmpty(){
+  activeNoteId=null;
+  document.getElementById('note-empty').classList.remove('hidden');
+  document.getElementById('note-form').classList.add('hidden');
+  document.getElementById('note-form').style.display='none';
+}
+function openNote(id,silent){
+  const n=notesArr().find(x=>x.id===id); if(!n) return;
+  activeNoteId=id;
+  document.getElementById('note-empty').classList.add('hidden');
+  const form=document.getElementById('note-form');
+  form.classList.remove('hidden'); form.style.display='flex';
+  document.getElementById('note-title').value=n.title||'';
+  document.getElementById('note-body').value=n.body||'';
+  document.getElementById('note-tag').value=n.tag||'';
+  if(!silent){
+    document.querySelectorAll('.note-item').forEach(el=>el.classList.toggle('on',el.dataset.nid===id));
+  }
+}
+function createNote(){
+  const n={id:'n_'+Date.now().toString(36),title:'',body:'',tag:'',createdAt:Date.now(),updatedAt:Date.now()};
+  notesArr().unshift(n); save(); activeNoteId=n.id; renderNotes(); openNote(n.id);
+  document.getElementById('note-title').focus();
+}
+function persistActiveNote(){
+  const n=notesArr().find(x=>x.id===activeNoteId); if(!n) return;
+  n.title=document.getElementById('note-title').value;
+  n.body=document.getElementById('note-body').value;
+  n.tag=document.getElementById('note-tag').value;
+  n.updatedAt=Date.now();
+  save();
+  const item=document.querySelector(`.note-item[data-nid="${n.id}"]`);
+  if(item){
+    item.querySelector('h4').textContent=n.title||'Untitled';
+    item.querySelector('p').textContent=(n.body||'').slice(0,100)||n.tag||'Empty note';
+    item.querySelector('time').textContent=new Date(n.updatedAt).toLocaleDateString(undefined,{month:'short',day:'numeric'});
+  }
+}
+function scheduleNoteSave(){
+  clearTimeout(noteSaveTimer);
+  noteSaveTimer=setTimeout(persistActiveNote,350);
+}
+function deleteActiveNote(){
+  if(!activeNoteId) return;
+  if(!confirm('Delete this note?')) return;
+  const u=user(); u.notes=notesArr().filter(n=>n.id!==activeNoteId); save();
+  activeNoteId=null; renderNotes(); toast('Note deleted');
+}
+document.getElementById('btn-note-new')?.addEventListener('click',createNote);
+document.getElementById('btn-note-del')?.addEventListener('click',deleteActiveNote);
+document.getElementById('notes-q')?.addEventListener('input',renderNotes);
+['note-title','note-body','note-tag'].forEach(id=>{
+  document.getElementById(id)?.addEventListener('input',scheduleNoteSave);
+});
 
 /* THEME */
 function applyTheme(mode){
@@ -1526,7 +1668,7 @@ function mk(id,cfg){if(charts[id])charts[id].destroy();const el=document.getElem
 
 document.getElementById('btn-export').onclick=()=>{
   const u=user(); if(!u) return;
-  const blob=new Blob([JSON.stringify({name:u.name,profile:u.profile,ledger:u.ledger,numerology:calcNumerology(u.profile?.dob,u.profile?.fullName||u.name),exported:new Date().toISOString()},null,2)],{type:'application/json'});
+  const blob=new Blob([JSON.stringify({name:u.name,profile:u.profile,ledger:u.ledger,notes:u.notes||[],numerology:calcNumerology(u.profile?.dob,u.profile?.fullName||u.name),exported:new Date().toISOString()},null,2)],{type:'application/json'});
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`gnostic_${u.name}_${activeDate}.json`; a.click();
 };
 
