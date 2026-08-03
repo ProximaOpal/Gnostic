@@ -111,7 +111,7 @@ export function Shell({ children, onSearch }: { children: ReactNode; onSearch?: 
           </div>
         </div>
         <div className="gx-section-label">{meta.title}</div>
-        <div className="gx-content">{children}</div>
+        <div className={`gx-content${key === '/diary' ? ' scrollable' : ''}`}>{children}</div>
       </main>
       <MobileNav />
     </div>
