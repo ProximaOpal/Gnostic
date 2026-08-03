@@ -1,11 +1,30 @@
 {
   "name": "gnostic",
-  "version": "1.0.0",
   "private": true,
-  "description": "Gnostic — Glorian spiritual diary & Sadhana ledger",
+  "version": "2.0.0",
+  "type": "module",
   "scripts": {
-    "start": "npx --yes serve -s . -l tcp://0.0.0.0:$PORT",
-    "dev": "npx --yes serve -s . -l 3000"
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "start": "npx --yes serve -s dist -l tcp://0.0.0.0:$PORT"
+  },
+  "dependencies": {
+    "chart.js": "^4.4.0",
+    "clsx": "^2.1.1",
+    "framer-motion": "^11.15.0",
+    "lucide-react": "^0.469.0",
+    "react": "^18.3.1",
+    "react-chartjs-2": "^5.3.0",
+    "react-dom": "^18.3.1",
+    "wouter": "^3.5.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "~5.6.2",
+    "vite": "^6.0.5"
   },
   "engines": {
     "node": ">=18"

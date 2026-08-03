@@ -1,0 +1,221 @@
+import { useMemo, useState } from 'react';
+import {
+  Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement,
+  BarElement, ArcElement, RadialLinearScale, Filler, Tooltip, Legend,
+} from 'chart.js';
+import { Line, Bar, Doughnut, Radar, Scatter } from 'react-chartjs-2';
+import { Shell } from '@/components/Shell';
+import { useStore } from '@/context/StoreContext';
+import { dateKey } from '@/lib/store';
+import { DEFECTS } from '@/lib/types';
+
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, ArcElement, RadialLinearScale, Filler, Tooltip, Legend);
+
+const MINT = '#06c97a';
+const NAVY = '#2c3a63';
+const AMBER = '#c9a227';
+const BLUE = '#0894ce';
+const ROSE = '#e85d4c';
+
+export function TrendsPage() {
+  const { user } = useStore();
+  const [range, setRange] = useState(30);
+
+  const rows = useMemo(() => {
+    const all = Object.entries(user?.ledger || {}).sort((a, b) => a[0].localeCompare(b[0]));
+    if (!range) return all;
+    const cut = new Date();
+    cut.setDate(cut.getDate() - range);
+    const ck = dateKey(cut);
+    return all.filter(([k]) => k >= ck);
+  }, [user, range]);
+
+  const avg = (arr: number[]) => (arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0);
+  const aware = rows.map(([, r]) => Number(r.aware) || 0);
+  const mech = rows.map(([, r]) => Number(r.mech) || 0);
+  const conc = rows.map(([, r]) => Number(r.conc) || 0);
+  const med = rows.map(([, r]) => Number(r.medMins) || 0);
+  const mood = rows.map(([, r]) => Number(r.mood) || 0);
+  const sleep = rows.map(([, r]) => Number(r.sleep) || 0);
+  const labels = rows.map(([k]) => {
+    const d = new Date(k + 'T12:00:00');
+    return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  });
+  const defectTotals = DEFECTS.map((d) => rows.reduce((s, [, r]) => s + (Number((r as Record<string, unknown>)[`${d.id}Count`]) || 0), 0));
+  const totalDef = rows.map(([, r]) => DEFECTS.reduce((s, d) => s + (Number((r as Record<string, unknown>)[`${d.id}Count`]) || 0), 0));
+  const energy = { consciousness: 0, external: 0, emotions: 0, intellect: 0, physical: 0 };
+  rows.forEach(([, r]) => { if (r.energy && r.energy in energy) energy[r.energy]++; });
+  const conduct = [
+    rows.length ? Math.round((rows.filter(([, r]) => (Number(r.divinity) || 0) >= 5).length / rows.length) * 100) : 0,
+    rows.length ? Math.round((rows.filter(([, r]) => r.chastity).length / rows.length) * 100) : 0,
+    rows.length ? Math.round((rows.filter(([, r]) => r.ateConsciously || r.ateProperly).length / rows.length) * 100) : 0,
+  ];
+  const pulse = rows.map(([, r]) => Math.round((Number(r.aware) || 0) * 6 + (Number(r.conc) || 0) * 8 + (Number(r.medMins) || 0) * 1.2 + (Number(r.mood) || 0) * 6));
+  const youRadar = [
+    Math.min(100, (avg(aware) / 16) * 100),
+    Math.min(100, (avg(conc) / 10) * 100),
+    Math.min(100, (avg(med) / 60) * 100),
+    Math.min(100, (avg(mood) / 10) * 100),
+  ].map((v) => Math.round(v || 0));
+  const baseRadar = [Math.min(100, (avg(mech) / 16) * 100), 35, 20, Math.max(20, 100 - youRadar[3])].map((v) => Math.round(v || 0));
+
+  let streak = 0;
+  const d = new Date();
+  while (user?.ledger[dateKey(d)]) { streak++; d.setDate(d.getDate() - 1); }
+
+  const common = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { labels: { color: '#6b7280', boxWidth: 10, font: { size: 11 } } } },
+    scales: {
+      x: { ticks: { color: '#6b7280', maxTicksLimit: 8, font: { size: 10 } }, grid: { color: 'rgba(0,0,0,.04)' } },
+      y: { ticks: { color: '#6b7280', font: { size: 10 } }, grid: { color: 'rgba(0,0,0,.04)' } },
+    },
+  };
+
+  const recent = [...rows].reverse().slice(0, 10);
+
+  return (
+    <Shell>
+      <h2>Statistical analysis</h2>
+      <p className="sub">Sadhana pulse — awareness, defects, conduct, sleep, energy, meditation.</p>
+
+      <div className="gx-tabs">
+        {[7, 30, 90, 365, 0].map((n) => (
+          <button key={n} className={`gx-tab ${range === n ? 'on' : ''}`} onClick={() => setRange(n)}>
+            {n === 0 ? 'All' : n === 365 ? 'Year' : `${n}d`}
+          </button>
+        ))}
+      </div>
+
+      <div className="gx-stats">
+        <div className="gx-stat"><b>{rows.length}</b><small>Days</small></div>
+        <div className="gx-stat"><b>{avg(aware).toFixed(1)}h</b><small>Aware</small></div>
+        <div className="gx-stat"><b>{avg(conc).toFixed(1)}</b><small>Focus</small></div>
+        <div className="gx-stat"><b>{Math.round(avg(med))}m</b><small>Meditate</small></div>
+        <div className="gx-stat"><b>{defectTotals.reduce((a, b) => a + b, 0)}</b><small>Defects</small></div>
+        <div className="gx-stat"><b>{streak}</b><small>Streak</small></div>
+        <div className="gx-stat"><b>{avg(mood).toFixed(1)}</b><small>Mood</small></div>
+        <div className="gx-stat"><b>{avg(sleep).toFixed(1)}h</b><small>Sleep</small></div>
+      </div>
+
+      <div className="gx-chart-grid">
+        <div className="gx-chart-card span2">
+          <h3>Practice radar</h3>
+          <div className="gx-chart-wrap tall">
+            <Radar data={{
+              labels: ['Awareness', 'Focus', 'Meditation', 'Mood'],
+              datasets: [
+                { label: 'Mechanical', data: baseRadar, backgroundColor: 'rgba(201,162,39,.15)', borderColor: AMBER, pointBackgroundColor: AMBER },
+                { label: 'Practice', data: youRadar, backgroundColor: 'rgba(6,201,122,.18)', borderColor: MINT, pointBackgroundColor: MINT },
+              ],
+            }} options={{ ...common, scales: { r: { min: 0, max: 100, ticks: { display: false }, grid: { color: 'rgba(0,0,0,.06)' }, pointLabels: { color: '#6b7280' } } } }} />
+          </div>
+        </div>
+
+        <div className="gx-chart-card span2">
+          <h3>Sadhana pulse</h3>
+          <div className="gx-chart-wrap pulse">
+            <Line data={{
+              labels,
+              datasets: [{ label: 'Pulse', data: pulse.length ? pulse : [0], borderColor: BLUE, backgroundColor: 'rgba(8,148,206,.15)', fill: true, tension: 0.42, pointRadius: 0, borderWidth: 3 }],
+            }} options={common} />
+          </div>
+        </div>
+
+        <div className="gx-chart-card span2">
+          <h3>Conscious vs mechanical</h3>
+          <div className="gx-chart-wrap tall">
+            <Bar data={{
+              labels,
+              datasets: [
+                { label: 'Conscious', data: aware, backgroundColor: 'rgba(8,148,206,.7)', stack: 's' },
+                { label: 'Mechanical', data: mech, backgroundColor: 'rgba(232,93,76,.55)', stack: 's' },
+              ],
+            }} options={{ ...common, scales: { ...common.scales, x: { ...common.scales.x, stacked: true }, y: { ...common.scales.y, stacked: true, max: 24 } } }} />
+          </div>
+        </div>
+
+        <div className="gx-chart-card">
+          <h3>Defect breakdown</h3>
+          <div className="gx-chart-wrap">
+            <Doughnut data={{ labels: DEFECTS.map((d) => d.title), datasets: [{ data: defectTotals, backgroundColor: [ROSE, AMBER, MINT, BLUE, NAVY], borderWidth: 0 }] }} options={{ ...common, scales: undefined }} />
+          </div>
+        </div>
+        <div className="gx-chart-card">
+          <h3>Concentration</h3>
+          <div className="gx-chart-wrap">
+            <Line data={{ labels, datasets: [{ label: 'Conc', data: conc, borderColor: BLUE, tension: 0.4, fill: true, backgroundColor: 'rgba(8,148,206,.1)', pointRadius: 2 }] }} options={{ ...common, scales: { ...common.scales, y: { ...common.scales.y, min: 0, max: 10 } } }} />
+          </div>
+        </div>
+        <div className="gx-chart-card">
+          <h3>Meditation minutes</h3>
+          <div className="gx-chart-wrap">
+            <Bar data={{ labels, datasets: [{ label: 'Min', data: med, backgroundColor: 'rgba(201,162,39,.7)' }] }} options={common} />
+          </div>
+        </div>
+        <div className="gx-chart-card">
+          <h3>Energy investment</h3>
+          <div className="gx-chart-wrap">
+            <Doughnut data={{ labels: Object.keys(energy), datasets: [{ data: Object.values(energy), backgroundColor: [BLUE, AMBER, ROSE, NAVY, MINT], borderWidth: 0 }] }} options={{ ...common, scales: undefined }} />
+          </div>
+        </div>
+        <div className="gx-chart-card span2">
+          <h3>Egoic triggers / day</h3>
+          <div className="gx-chart-wrap">
+            <Line data={{ labels, datasets: [{ label: 'Triggers', data: totalDef, borderColor: ROSE, fill: true, backgroundColor: 'rgba(232,93,76,.12)', tension: 0.4, pointRadius: 2 }] }} options={common} />
+          </div>
+        </div>
+        <div className="gx-chart-card">
+          <h3>Conduct adherence %</h3>
+          <div className="gx-chart-wrap">
+            <Bar data={{ labels: ['Divinity', 'Chastity', 'Eating'], datasets: [{ data: conduct, backgroundColor: [BLUE, AMBER, MINT] }] }} options={{ ...common, scales: { ...common.scales, y: { ...common.scales.y, min: 0, max: 100 } } }} />
+          </div>
+        </div>
+        <div className="gx-chart-card">
+          <h3>Sleep vs awareness</h3>
+          <div className="gx-chart-wrap">
+            <Scatter data={{ datasets: [{ label: 'Sleep→Aware', data: rows.map(([, r]) => ({ x: Number(r.sleep) || 0, y: Number(r.aware) || 0 })), backgroundColor: BLUE }] }} options={common} />
+          </div>
+        </div>
+        <div className="gx-chart-card">
+          <h3>Mood trend</h3>
+          <div className="gx-chart-wrap">
+            <Line data={{ labels, datasets: [{ label: 'Mood', data: mood, borderColor: MINT, tension: 0.4, fill: true, backgroundColor: 'rgba(6,201,122,.12)', pointRadius: 2 }] }} options={{ ...common, scales: { ...common.scales, y: { ...common.scales.y, min: 0, max: 10 } } }} />
+          </div>
+        </div>
+        <div className="gx-chart-card">
+          <h3>Aware vs mechanical avg</h3>
+          <div className="gx-chart-wrap">
+            <Doughnut data={{ labels: ['Aware', 'Mechanical'], datasets: [{ data: [avg(aware), avg(mech)], backgroundColor: [BLUE, ROSE], borderWidth: 0 }] }} options={{ ...common, scales: undefined }} />
+          </div>
+        </div>
+        <div className="gx-chart-card span2">
+          <h3>Individual defect trends</h3>
+          <div className="gx-chart-wrap tall">
+            <Line data={{
+              labels,
+              datasets: DEFECTS.map((d, i) => ({
+                label: d.title,
+                data: rows.map(([, r]) => Number((r as Record<string, unknown>)[`${d.id}Count`]) || 0),
+                borderColor: [ROSE, AMBER, MINT, BLUE, NAVY][i],
+                tension: 0.3, pointRadius: 1, borderWidth: 1.5,
+              })),
+            }} options={common} />
+          </div>
+        </div>
+      </div>
+
+      <h3 style={{ fontFamily: 'Poppins', margin: '18px 0 10px' }}>Latest activity</h3>
+      {recent.length === 0 && <div className="gx-card" style={{ color: 'var(--ink-soft)' }}>No entries yet</div>}
+      {recent.map(([k, r]) => (
+        <div key={k} className="gx-card" style={{ marginBottom: 8 }}>
+          <strong>{k}</strong>
+          <p style={{ fontSize: 13, color: 'var(--ink-soft)' }}>
+            Aware {r.aware || 0}h · Focus {r.conc || 0} · {(r.virtue || r.study || r.tomorrow || r.energy || 'Logged').toString().slice(0, 80)}
+          </p>
+        </div>
+      ))}
+    </Shell>
+  );
+}

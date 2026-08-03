@@ -1,21 +1,28 @@
 # Gnostic
 
-Spiritual diary inspired by Glorian's *Spiritual Diary, a Daily Record of Observed Facts* — morning, day review, before bed, and daily summary. Icon-first, local multi-user, with Glorian search across your ledger.
-
-## Local
-
-Open `index.html`, or:
-
-```bash
-npm run dev
-```
+Spiritual diary (Glorian / Sivananda) with StarGTM-inspired UX — React + Vite.
 
 ## Pages
 
-- **Today** — calendar + cosmic strip + phase cards (Morning / Day / Night / Summary)
-- **Notes** — freeform spiritual notes with search and autosave
-- **Psyche** — personal profile, Chaldean numerology, natal chart, planetary hours, daily tarot, life stages, pattern analysis
-- **Search** — Glorian guidance + search your entries
-- **Trends** — awareness, defects, practice at a glance
+- **Home** — command center + photo cards  
+- **Diary** — Morning / Day / Night / Summary  
+- **Notes** — freeform notes  
+- **Psyche** — Chaldean numerology, planets, tarot, profile  
+- **Search** — Glorian + ledger + notes  
+- **Trends** — full analytics charts  
+- **You** — export / logout  
 
-Data stays in each browser's `localStorage`.
+## Local
+
+```bash
+npm install
+npm run dev
+```
+
+## Build
+
+```bash
+npm run build
+```
+
+Static output in `dist/`. Data stays in browser `localStorage` (`gnostic_v1`).
