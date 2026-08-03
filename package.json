@@ -1,8 +1,8 @@
 {
-  "name": "nexus-calendar",
+  "name": "gnostic",
   "version": "1.0.0",
   "private": true,
-  "description": "Nexus — quest calendar for Tony & Alphy",
+  "description": "Gnostic — Glorian spiritual diary & Sadhana ledger",
   "scripts": {
     "start": "npx --yes serve -s . -l tcp://0.0.0.0:$PORT",
     "dev": "npx --yes serve -s . -l 3000"

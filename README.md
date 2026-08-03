@@ -1,4 +1,4 @@
-﻿# Gnostic
+# Gnostic
 
 Spiritual diary inspired by Glorian's *Spiritual Diary, a Daily Record of Observed Facts* — morning, day review, before bed, and daily summary. Icon-first, local multi-user, with Glorian search across your ledger.
 

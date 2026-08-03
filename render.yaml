@@ -1,10 +1,6 @@
 services:
   - type: web
-    name: nexus-calendar
+    name: gnostic
     runtime: static
-    buildCommand: ""
     staticPublishPath: .
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
+    buildCommand: ""
