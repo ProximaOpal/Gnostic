@@ -1,0 +1,13 @@
+{
+  "name": "nexus-calendar",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Nexus — quest calendar for Tony & Alphy",
+  "scripts": {
+    "start": "npx --yes serve -s . -l tcp://0.0.0.0:$PORT",
+    "dev": "npx --yes serve -s . -l 3000"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
