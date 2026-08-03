@@ -64,7 +64,7 @@ img{max-width:100%;display:block}
 .top .who{display:flex;align-items:center;gap:8px;font-size:.9rem;color:var(--ink2)}
 .top .who img,.top .who .avatar{width:34px;height:34px;border-radius:50%}
 .wrap{max-width:920px;margin:0 auto;padding:18px 18px 40px}
-.nav{position:fixed;left:0;right:0;bottom:0;z-index:50;background:rgba(247,248,244,.95);backdrop-filter:blur(16px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding:8px 6px calc(8px + env(safe-area-inset-bottom))}
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:50;background:rgba(247,248,244,.95);backdrop-filter:blur(16px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding:8px 6px calc(8px + env(safe-area-inset-bottom))}
 .nav button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px;border-radius:14px;color:var(--mute);font-size:.68rem;letter-spacing:.04em;text-transform:uppercase}
 .nav button.on{color:var(--leaf2);background:rgba(47,107,79,.08)}
 .nav .icon{width:1.55rem;height:1.55rem}
@@ -154,6 +154,47 @@ img{max-width:100%;display:block}
 
 .toast{position:fixed;left:50%;bottom:100px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:10px 16px;border-radius:999px;opacity:0;pointer-events:none;transition:.25s;z-index:80;font-size:.9rem;display:flex;align-items:center;gap:8px}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* PSYCHE */
+.cosmic-strip{display:flex;gap:8px;overflow:auto;padding-bottom:14px;scrollbar-width:none}
+.cosmic-strip::-webkit-scrollbar{display:none}
+.num-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.num-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;text-align:center}
+.num-card .big{font-family:var(--serif);font-size:2.2rem;color:var(--leaf2);line-height:1}
+.num-card small{display:block;color:var(--mute);font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;margin:6px 0 4px}
+.num-card p{font-size:.78rem;color:var(--ink2);line-height:1.35}
+.planet-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+.planet{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 8px;text-align:center}
+.planet.on{border-color:var(--gold);background:rgba(154,123,60,.1)}
+.planet .pe{font-size:1.6rem;display:block;margin-bottom:4px}
+.planet b{display:block;font-size:.85rem}
+.planet small{color:var(--mute);font-size:.68rem}
+.tarot-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.tarot{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;text-align:center}
+.tarot .te{font-size:2.6rem;display:block;margin:6px 0 8px;filter:drop-shadow(0 4px 12px rgba(154,123,60,.25))}
+.tarot h4{font-family:var(--serif);font-size:1.15rem;margin-bottom:4px}
+.tarot .meta{font-size:.72rem;color:var(--mute);margin-bottom:8px}
+.tarot p{font-size:.82rem;color:var(--ink2)}
+.tag{display:inline-flex;align-items:center;gap:5px;padding:6px 11px;border-radius:999px;border:1px solid var(--line);font-size:.78rem;margin:3px;cursor:pointer;background:#fff}
+.tag.on{border-color:var(--leaf);background:rgba(47,107,79,.1);color:var(--leaf2)}
+.psych-type{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.psych-type .tag{margin:0;justify-content:center;padding:12px 8px;border-radius:14px;flex-direction:column;text-align:center}
+.stage-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
+.stage{padding:12px;border-radius:14px;border:1px solid var(--line);background:var(--card);opacity:.55}
+.stage.now{opacity:1;border-color:var(--leaf);background:rgba(47,107,79,.08)}
+.stage.past{opacity:.85}
+.bar{height:6px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:8px}
+.bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--leaf),var(--gold));border-radius:99px}
+.onboard{position:fixed;inset:0;z-index:200;background:rgba(26,34,24,.72);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:16px}
+.onboard.open{display:flex}
+.onboard-box{background:var(--paper);width:min(560px,100%);max-height:90vh;overflow:auto;border-radius:24px;padding:22px}
+.onboard-box h2{font-family:var(--serif);font-size:1.5rem;margin:4px 0 8px}
+.ob-dots{display:flex;gap:4px;margin:12px 0 18px}
+.ob-dots i{flex:1;height:3px;border-radius:2px;background:var(--line)}
+.ob-dots i.on{background:var(--leaf)}
+.arcana-mini{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:6px}
+.arcana-mini button{padding:8px 4px;border-radius:12px;border:1px solid var(--line);background:#fff;font-size:.65rem;color:var(--mute)}
+.arcana-mini .ae{font-size:1.2rem;display:block}
 </style>
 </head>
 <body>
@@ -198,6 +239,7 @@ img{max-width:100%;display:block}
         </div>
       </div>
       <div class="date-strip" id="date-strip"></div>
+      <div class="cosmic-strip" id="cosmic-strip"></div>
       <div class="phase-grid">
         <button class="phase" data-phase="morning"><div class="ph" style="background-image:var(--dawn)"></div><div class="check"><span class="iconify icon" data-icon="fluent-emoji:check-mark-button"></span></div><div class="body"><span class="iconify icon-lg" data-icon="fluent-emoji:sunrise"></span><strong>Morning</strong><span>Sleep · dreams · practice</span></div></button>
         <button class="phase" data-phase="day"><div class="ph" style="background-image:var(--day)"></div><div class="check"><span class="iconify icon" data-icon="fluent-emoji:check-mark-button"></span></div><div class="body"><span class="iconify icon-lg" data-icon="fluent-emoji:eye"></span><strong>Day</strong><span>Conduct · defects · service</span></div></button>
@@ -397,6 +439,51 @@ img{max-width:100%;display:block}
     </div>
   </div>
 
+  <!-- PSYCHE -->
+  <div id="view-psyche" class="view">
+    <div class="wrap">
+      <div class="hero" style="min-height:180px;margin-bottom:14px">
+        <div class="hero-bg" style="background-image:url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=1400&q=70')"></div>
+        <div class="hero-body" style="min-height:180px">
+          <span class="pill"><span class="iconify icon" data-icon="fluent-emoji:crystal-ball"></span> Personal intelligence</span>
+          <h1 style="font-size:clamp(1.8rem,4vw,2.4rem)">Psyche</h1>
+          <p>Chaldean numbers · planets · tarot · self-portrait</p>
+        </div>
+      </div>
+      <div class="btn-row" style="margin-bottom:16px">
+        <button class="btn btn-primary" style="width:auto" id="btn-open-profile"><span class="iconify icon" data-icon="fluent-emoji:gear"></span> Edit profile</button>
+      </div>
+
+      <div class="section-title"><span class="iconify icon-xl" data-icon="fluent-emoji:input-numbers"></span> Chaldean</div>
+      <div class="num-grid" id="num-grid"></div>
+      <div class="card" id="age-card" style="margin-top:12px;display:none">
+        <div class="card-h"><div class="ico"><span class="iconify icon-lg" data-icon="fluent-emoji:hourglass-not-done"></span></div><div><h3 id="age-title">Age</h3><p id="age-stage"></p></div></div>
+        <div class="bar"><i id="age-bar" style="width:0%"></i></div>
+        <div class="stage-row" id="life-stages" style="margin-top:12px"></div>
+      </div>
+
+      <div class="section-title"><span class="iconify icon-xl" data-icon="fluent-emoji:crystal-ball"></span> Daily tarot</div>
+      <div class="tarot-grid" id="tarot-cards"></div>
+      <div class="card" style="margin-top:12px">
+        <div class="card-h"><div class="ico"><span class="iconify icon-lg" data-icon="fluent-emoji:sparkles"></span></div><div><h3>22 Major Arcana</h3><p>Samael’s laws of the cosmos</p></div></div>
+        <div class="arcana-mini" id="arcana-mini"></div>
+      </div>
+
+      <div class="section-title"><span class="iconify icon-xl" data-icon="fluent-emoji:ringed-planet"></span> Planets</div>
+      <div class="planet-grid" id="planet-grid"></div>
+      <div class="card" id="planet-hour" style="margin-top:12px"></div>
+
+      <div class="section-title"><span class="iconify icon-xl" data-icon="fluent-emoji:spiral-calendar"></span> Year cycle</div>
+      <div id="yearly-box"></div>
+
+      <div class="section-title"><span class="iconify icon-xl" data-icon="fluent-emoji:dna"></span> Self-portrait</div>
+      <div id="psych-profile"></div>
+
+      <div class="section-title"><span class="iconify icon-xl" data-icon="fluent-emoji:chart-increasing"></span> Patterns from ledger</div>
+      <div id="psych-patterns"></div>
+    </div>
+  </div>
+
   <!-- TRENDS -->
   <div id="view-trends" class="view">
     <div class="wrap">
@@ -417,6 +504,7 @@ img{max-width:100%;display:block}
         <h2 id="you-name" style="font-family:var(--serif)"></h2>
         <p style="color:var(--mute);margin:6px 0 16px">Local ledger · device only</p>
         <div class="btn-row" style="justify-content:center">
+          <button class="btn btn-ghost" id="btn-edit-psyche"><span class="iconify icon" data-icon="fluent-emoji:crystal-ball"></span> Psyche profile</button>
           <button class="btn btn-ghost" id="btn-export"><span class="iconify icon" data-icon="fluent-emoji:outbox-tray"></span> Export JSON</button>
           <button class="btn btn-ghost" id="btn-logout2"><span class="iconify icon" data-icon="fluent-emoji:waving-hand"></span> Log out</button>
         </div>
@@ -426,22 +514,46 @@ img{max-width:100%;display:block}
 
   <nav class="nav">
     <button data-view="today" class="on"><span class="iconify icon" data-icon="fluent-emoji:spiral-calendar"></span>Today</button>
+    <button data-view="psyche"><span class="iconify icon" data-icon="fluent-emoji:crystal-ball"></span>Psyche</button>
     <button data-view="search"><span class="iconify icon" data-icon="fluent-emoji:magnifying-glass-tilted-right"></span>Search</button>
     <button data-view="trends"><span class="iconify icon" data-icon="fluent-emoji:chart-increasing"></span>Trends</button>
     <button data-view="you"><span class="iconify icon" data-icon="fluent-emoji:bust-in-silhouette"></span>You</button>
   </nav>
 </section>
 
+<!-- ONBOARDING -->
+<div class="onboard" id="onboard">
+  <div class="onboard-box">
+    <div class="pill"><span class="iconify icon" data-icon="fluent-emoji:crystal-ball"></span> Personal intelligence</div>
+    <h2 id="ob-title">Setup</h2>
+    <p id="ob-desc" style="color:var(--mute);font-size:.9rem"></p>
+    <div class="ob-dots" id="ob-dots"></div>
+    <div id="ob-body"></div>
+    <div class="btn-row" style="margin-top:16px;justify-content:space-between">
+      <button class="btn btn-ghost" id="ob-prev" type="button">Back</button>
+      <button class="btn btn-primary" style="width:auto" id="ob-next" type="button">Continue</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
 const STORE = 'gnostic_v1';
+const WEEKDAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const DEFECTS = [
   {id:'lies', title:'Lies', icon:'fluent-emoji:lying-face', sub:'How many · make up for it'},
   {id:'anger', title:'Anger', icon:'fluent-emoji:face-with-steam-from-nose', sub:'Times · duration · answer'},
   {id:'lust', title:'Lust', icon:'fluent-emoji:fire', sub:'Times · duration · answer'},
   {id:'envy', title:'Envy', icon:'fluent-emoji:green-heart', sub:'Times · duration · answer'},
   {id:'fear', title:'Fear', icon:'fluent-emoji:anxious-face-with-sweat', sub:'Times · duration · answer'},
+];
+const DEFECT_TAGS = [
+  ...DEFECTS,
+  {id:'pride', title:'Pride', icon:'fluent-emoji:crown'},
+  {id:'glut', title:'Gluttony', icon:'fluent-emoji:fork-and-knife-with-plate'},
+  {id:'lazy', title:'Laziness', icon:'fluent-emoji:person-in-bed'},
+  {id:'other', title:'Other', icon:'fluent-emoji:warning'},
 ];
 const GUIDES = [
   {id:'morning', title:'Morning', icon:'fluent-emoji:sunrise', bg:'var(--dawn)', q:'sleep dreams practice'},
@@ -456,11 +568,81 @@ const PHASE_KEYS = {
   night:['conc','concWhy','medMins','medDetail','retro','retroLearned','defectMed','defectMedMins','defectMedShowed','virtue','virtueLearned','eradicate','eradicateLearned','obstacle','antidote','antidoteApplied'],
   summary:['aware','mech','energy','tomorrow']
 };
+const CHALDEAN = {A:1,B:2,C:3,D:4,E:5,F:8,G:3,H:5,I:1,J:1,K:2,L:3,M:4,N:5,O:7,P:8,Q:1,R:2,S:3,T:4,U:6,V:6,W:6,X:5,Y:1,Z:7};
+const NUM_MEANINGS = {
+  1:{name:'The Sun',icon:'fluent-emoji:sun',desc:'Leadership, independence, beginnings.'},
+  2:{name:'The Moon',icon:'fluent-emoji:crescent-moon',desc:'Sensitivity, cooperation, polarity.'},
+  3:{name:'Jupiter',icon:'fluent-emoji:sparkles',desc:'Creativity, expression, Trinity.'},
+  4:{name:'Uranus',icon:'fluent-emoji:building-construction',desc:'Building, stability, the square.'},
+  5:{name:'Mercury',icon:'fluent-emoji:high-voltage',desc:'Freedom, communication, change.'},
+  6:{name:'Venus',icon:'fluent-emoji:rose',desc:'Love, responsibility, harmony.'},
+  7:{name:'Neptune',icon:'fluent-emoji:crystal-ball',desc:'Mysticism, initiation, the veil.'},
+  8:{name:'Saturn',icon:'fluent-emoji:ringed-planet',desc:'Power, karma, material mastery.'},
+  9:{name:'Mars',icon:'fluent-emoji:fire',desc:'Completion, service — sacred in Chaldean.'},
+  11:{name:'The Awakener',icon:'fluent-emoji:high-voltage',desc:'Master number — illumination.'},
+  22:{name:'Master Builder',icon:'fluent-emoji:classical-building',desc:'Master number — grand vision.'},
+  33:{name:'Master Teacher',icon:'fluent-emoji:dove',desc:'Master number — Christic service.'}
+};
+const LIFE_STAGES = [
+  {years:[0,7], name:'Lunar Childhood', icon:'fluent-emoji:seedling', desc:'Etheric formation · imagination.'},
+  {years:[7,14], name:'Moon–Mercury', icon:'fluent-emoji:crescent-moon', desc:'Astral body · memory awakens.'},
+  {years:[14,21], name:'Venus Adolescence', icon:'fluent-emoji:sparkles', desc:'Desire · sexual forces arise.'},
+  {years:[21,28], name:'Solar Maturity', icon:'fluent-emoji:sun', desc:'The I takes possession.'},
+  {years:[28,35], name:'Mars Activation', icon:'fluent-emoji:crossed-swords', desc:'Will and conflict peak.'},
+  {years:[35,42], name:'Jupiter Expansion', icon:'fluent-emoji:glowing-star', desc:'Wisdom through experience.'},
+  {years:[42,49], name:'Saturn Reckoning', icon:'fluent-emoji:balance-scale', desc:'Karmic accounting.'},
+  {years:[49,56], name:'Uranus Awakening', icon:'fluent-emoji:high-voltage', desc:'Second birth of the soul.'},
+  {years:[56,63], name:'Neptune Dissolving', icon:'fluent-emoji:water-wave', desc:'Ego structures dissolve.'},
+  {years:[63,70], name:'Pluto Integration', icon:'fluent-emoji:skull', desc:'Death as transformation.'},
+  {years:[70,99], name:'Cosmic Completion', icon:'fluent-emoji:milky-way', desc:'Return to Source.'}
+];
+const PLANETS = [
+  {name:'Sun', emoji:'☀️', day:'Sunday', quality:'Will, consciousness, solar force'},
+  {name:'Moon', emoji:'🌙', day:'Monday', quality:'Reflection, dreams, cycles'},
+  {name:'Mars', emoji:'♂️', day:'Tuesday', quality:'Force, courage, sexual energy'},
+  {name:'Mercury', emoji:'☿', day:'Wednesday', quality:'Mind, communication, duality'},
+  {name:'Jupiter', emoji:'♃', day:'Thursday', quality:'Expansion, wisdom, grace'},
+  {name:'Venus', emoji:'♀️', day:'Friday', quality:'Love, beauty, sacred feminine'},
+  {name:'Saturn', emoji:'♄', day:'Saturday', quality:'Karma, discipline, initiation'},
+];
+const TAROT = [
+  {n:0,name:'The Fool',emoji:'🃏',key:'Aleph',planet:'Uranus',desc:'Spirit before manifestation.',interp:'Leap of faith. Pure potential — be innocent of ego.'},
+  {n:1,name:'The Magician',emoji:'⚗️',key:'Beth',planet:'Mercury',desc:'Conscious will. Logos active.',interp:'Channel Above to Below. Sacred intention.'},
+  {n:2,name:'High Priestess',emoji:'🌙',key:'Gimel',planet:'Moon',desc:'Divine Mother. Intuition.',interp:'Enter silence. Trust intuition completely.'},
+  {n:3,name:'The Empress',emoji:'🌿',key:'Daleth',planet:'Venus',desc:'Abundance. Cosmic womb.',interp:'Nourish and create. Emotional life is fertile.'},
+  {n:4,name:'The Emperor',emoji:'👑',key:'Heh',planet:'Aries',desc:'Will, structure, authority.',interp:'Lead yourself with discipline.'},
+  {n:5,name:'The Hierophant',emoji:'🗝️',key:'Vau',planet:'Taurus',desc:'Initiation. Inner Master.',interp:'Seek hidden knowledge. Return to lineage.'},
+  {n:6,name:'The Lovers',emoji:'💫',key:'Zayin',planet:'Gemini',desc:'Polarity. Alchemy.',interp:'Fundamental choice. Transmute sexual energy.'},
+  {n:7,name:'The Chariot',emoji:'⚔️',key:'Cheth',planet:'Cancer',desc:'Victory through will.',interp:'Consciousness holds the reins.'},
+  {n:8,name:'Strength',emoji:'🦁',key:'Teth',planet:'Leo',desc:'Taming the beast.',interp:'Lust tamed by love and patience.'},
+  {n:9,name:'The Hermit',emoji:'🕯️',key:'Yod',planet:'Virgo',desc:'Inner light. Solitude.',interp:'Retreat. Isolation from noise.'},
+  {n:10,name:'Wheel of Fortune',emoji:'🎡',key:'Kaph',planet:'Jupiter',desc:'Cycles. Karma.',interp:'Accept what arises with equanimity.'},
+  {n:11,name:'Justice',emoji:'⚖️',key:'Lamed',planet:'Libra',desc:'Cause and effect.',interp:'Every deed is recorded. Observe causes.'},
+  {n:12,name:'The Hanged Man',emoji:'🔮',key:'Mem',planet:'Neptune',desc:'Surrender. Reversal.',interp:'Die to personality. Reverse perception.'},
+  {n:13,name:'Death',emoji:'💀',key:'Nun',planet:'Scorpio',desc:'Transformation.',interp:'What ego-structures must die today?'},
+  {n:14,name:'Temperance',emoji:'🏹',key:'Samekh',planet:'Sagittarius',desc:'Alchemy. Solar force.',interp:'Transmute sexual energy into Christic force.'},
+  {n:15,name:'The Devil',emoji:'🐐',key:'Ayin',planet:'Capricorn',desc:'Ego. Bondage.',interp:'Observe the mechanical person without identification.'},
+  {n:16,name:'The Tower',emoji:'⚡',key:'Peh',planet:'Mars',desc:'False structures fall.',interp:'Surrender to disintegration of ego-constructs.'},
+  {n:17,name:'The Star',emoji:'⭐',key:'Tzaddi',planet:'Aquarius',desc:'Hope. Renewal.',interp:'Bathe in cosmic waters after the tower falls.'},
+  {n:18,name:'The Moon',emoji:'🌕',key:'Qoph',planet:'Pisces',desc:'Subconscious. Illusion.',interp:'Observe dreams and emotional reactions.'},
+  {n:19,name:'The Sun',emoji:'☀️',key:'Resh',planet:'Sun',desc:'Christic solar force.',interp:'Joy when ego does not interfere. Radiate.'},
+  {n:20,name:'Judgement',emoji:'📯',key:'Shin',planet:'Pluto',desc:'Call to awakening.',interp:'Respond to the trumpet with commitment.'},
+  {n:21,name:'The World',emoji:'🌍',key:'Tau',planet:'Saturn',desc:'Completion. Liberation.',interp:'Integrate every experience as fuel for consciousness.'}
+];
+const PSYCH_TYPES = {
+  Intellectual:{icon:'fluent-emoji:brain',samael:'The dry mind that escapes feeling. Must learn to feel.'},
+  Emotional:{icon:'fluent-emoji:sparkling-heart',samael:'Dominated by feeling. Must use the mind as a sword.'},
+  Instinctual:{icon:'fluent-emoji:high-voltage',samael:'Governed by impulse and gut. Transmute instinct consciously.'},
+  Motor:{icon:'fluent-emoji:person-running',samael:'Governed by movement. Develop inner stillness.'},
+  Sexual:{icon:'fluent-emoji:rose',samael:'Sexual centre dominates — greatest curse and alchemical resource.'}
+};
+const BEHAVIOURS = ['Perfectionism','Procrastination','People-pleasing','Avoidance','Intellectualisation','Emotional suppression','Impulsivity','Rumination','Self-sabotage','Comparison','Isolation','Overwork','Fantasising','Spiritual bypassing','Addiction loops','Grandiosity','Victimhood','Control','Jealousy projection','Shame cycles'];
 
 let state = load();
 let activeDate = dateKey(new Date());
 let pendingUser = null;
 let charts = {};
+let obStep = 0;
 
 function load(){
   try{return JSON.parse(localStorage.getItem(STORE))||{users:{},active:null};}
@@ -471,6 +653,7 @@ function uid(){return 'u_'+Math.random().toString(36).slice(2,10);}
 function dateKey(d){const x=d instanceof Date?d:new Date(d);return `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')}`;}
 function hash(s){let h=0;for(let i=0;i<s.length;i++)h=((h<<5)-h)+s.charCodeAt(i)|0;return 'h'+h;}
 function user(){return state.users[state.active];}
+function profile(){const u=user(); if(!u) return {}; if(!u.profile) u.profile={}; return u.profile;}
 function entry(){
   const u=user(); if(!u) return {};
   if(!u.ledger[activeDate]) u.ledger[activeDate]={};
@@ -483,6 +666,48 @@ function toast(msg){
   setTimeout(()=>t.classList.remove('show'),1800);
   if(window.Iconify) Iconify.scan(t);
 }
+function scan(el){if(window.Iconify&&el) Iconify.scan(el);}
+function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+/* NUMEROLOGY / COSMIC */
+function chaldeanReduce(n){while(n>9&&![11,22,33].includes(n))n=String(n).split('').reduce((s,c)=>s+parseInt(c),0);return n;}
+function chaldeanName(name){if(!name)return 0;return name.toUpperCase().replace(/[^A-Z]/g,'').split('').reduce((s,c)=>s+(CHALDEAN[c]||0),0);}
+function calcNumerology(dob,name){
+  if(!dob)return {};
+  const[y,m,d]=dob.split('-').map(Number);
+  const lifePath=chaldeanReduce(y+m+d);
+  const destiny=chaldeanReduce(chaldeanName(name));
+  const vowels=name?name.toUpperCase().replace(/[^AEIOU]/g,'').split('').reduce((s,c)=>s+(CHALDEAN[c]||0),0):0;
+  const soul=chaldeanReduce(vowels);
+  const now=new Date(activeDate+'T12:00:00');
+  const personalYear=chaldeanReduce(m+d+now.getFullYear());
+  const personalMonth=chaldeanReduce(personalYear+(now.getMonth()+1));
+  const personalDay=chaldeanReduce(personalYear+(now.getMonth()+1)+now.getDate());
+  return {lifePath,destiny,soul,personalYear,personalMonth,personalDay};
+}
+function getAge(dob){
+  if(!dob)return null;
+  const[y,m,d]=dob.split('-').map(Number);
+  const now=new Date(activeDate+'T12:00:00');
+  let age=now.getFullYear()-y;
+  if(now.getMonth()+1<m||(now.getMonth()+1===m&&now.getDate()<d))age--;
+  return age;
+}
+function getDailyTarot(dt=new Date(activeDate+'T12:00:00')){
+  const p=profile();
+  const num=calcNumerology(p.dob,p.fullName||user()?.name);
+  const pd=num.personalDay||((dt.getDate()+dt.getMonth()+1+dt.getFullYear())%22);
+  const universal=(dt.getDate()+dt.getMonth()+1+dt.getFullYear())%22;
+  const dailyIdx=Math.abs(pd+universal)%22;
+  return {primary:TAROT[dailyIdx],secondary:TAROT[(dailyIdx+dt.getDay())%22]};
+}
+function getDayRuler(dt=new Date(activeDate+'T12:00:00')){return PLANETS[dt.getDay()];}
+function getPlanetaryHour(dt=new Date()){
+  const chaldean=['Saturn','Jupiter','Mars','Sun','Venus','Mercury','Moon'];
+  const dayRulerIdx=PLANETS.findIndex(p=>p.day===WEEKDAYS[dt.getDay()]);
+  const planet=chaldean[(dayRulerIdx+dt.getHours())%7];
+  return PLANETS.find(p=>p.name===planet)||PLANETS[0];
+}
 
 /* AUTH */
 function renderRoster(){
@@ -493,7 +718,7 @@ function renderRoster(){
       <div class="avatar">${u.avatar?`<img src="${u.avatar}" alt="">`:`<span class="iconify icon" data-icon="fluent-emoji:bust-in-silhouette"></span>`}</div>
       <small>${esc(u.name)}</small>
     </button>`).join('')||'<p class="hint" style="grid-column:1/-1">No practitioners yet — create one below.</p>';
-  if(window.Iconify) Iconify.scan(g);
+  scan(g);
   g.querySelectorAll('[data-uid]').forEach(btn=>btn.onclick=()=>{
     pendingUser=btn.dataset.uid;
     document.getElementById('auth-signup').classList.add('hidden');
@@ -509,8 +734,7 @@ document.getElementById('btn-back-roster').onclick=()=>{
 };
 document.getElementById('btn-signin').onclick=()=>{
   const u=state.users[pendingUser]; if(!u) return;
-  const p=document.getElementById('signin-pass').value;
-  if(hash(p)!==u.pass){toast('Wrong password');return;}
+  if(hash(document.getElementById('signin-pass').value)!==u.pass){toast('Wrong password');return;}
   enter(u.id);
 };
 document.getElementById('btn-signup').onclick=async()=>{
@@ -521,15 +745,17 @@ document.getElementById('btn-signup').onclick=async()=>{
   const f=document.getElementById('su-photo').files?.[0];
   if(f) avatar=await fileToData(f);
   const id=uid();
-  state.users[id]={id,name,pass:hash(pass),avatar,ledger:{},createdAt:Date.now()};
-  save(); enter(id);
+  state.users[id]={id,name,pass:hash(pass),avatar,ledger:{},profile:{fullName:name},createdAt:Date.now()};
+  save(); enter(id); setTimeout(openOnboarding,600);
 };
 function fileToData(f){return new Promise(res=>{const r=new FileReader();r.onload=()=>res(r.result);r.readAsDataURL(f);});}
 function enter(id){
   state.active=id; save();
+  const u=user(); if(u&&!u.profile) u.profile={};
   document.getElementById('auth').style.display='none';
   document.getElementById('app').style.display='block';
-  paintWho(); renderDateStrip(); paintPhases(); fillForms(); renderGuides();
+  paintWho(); renderDateStrip(); paintPhases(); fillForms(); renderGuides(); renderCosmicStrip();
+  if(u&&!u.profile?.dob) setTimeout(openOnboarding,700);
 }
 function logout(){
   state.active=null; save();
@@ -547,7 +773,7 @@ function paintWho(){
   document.getElementById('who').innerHTML=`${u.avatar?`<img src="${u.avatar}" alt="">`:`<div class="avatar"><span class="iconify icon" data-icon="fluent-emoji:bust-in-silhouette"></span></div>`}<span>${esc(u.name)}</span>`;
   document.getElementById('you-name').textContent=u.name;
   document.getElementById('you-avatar').innerHTML=u.avatar?`<img src="${u.avatar}" alt="" style="width:100%;height:100%;object-fit:cover">`:`<span class="iconify icon-xl" data-icon="fluent-emoji:bust-in-silhouette"></span>`;
-  if(window.Iconify){Iconify.scan(document.getElementById('who'));Iconify.scan(document.getElementById('you-avatar'));}
+  scan(document.getElementById('who')); scan(document.getElementById('you-avatar'));
 }
 
 /* NAV */
@@ -555,16 +781,19 @@ document.querySelectorAll('.nav [data-view]').forEach(b=>b.onclick=()=>showView(
 document.querySelectorAll('.phase').forEach(b=>b.onclick=()=>showView(b.dataset.phase));
 function showView(name){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
-  const map={today:'view-today',morning:'view-morning',day:'view-day',night:'view-night',summary:'view-summary',search:'view-search',trends:'view-trends',you:'view-you'};
+  const map={today:'view-today',morning:'view-morning',day:'view-day',night:'view-night',summary:'view-summary',search:'view-search',trends:'view-trends',you:'view-you',psyche:'view-psyche'};
   document.getElementById(map[name]||'view-today').classList.add('on');
-  document.querySelectorAll('.nav [data-view]').forEach(b=>b.classList.toggle('on',['today','search','trends','you'].includes(name)&&b.dataset.view===name));
+  const navs=['today','psyche','search','trends','you'];
+  document.querySelectorAll('.nav [data-view]').forEach(b=>b.classList.toggle('on',navs.includes(name)&&b.dataset.view===name));
   if(['morning','day','night','summary'].includes(name)) fillForms();
   if(name==='trends') renderTrends();
   if(name==='search') runSearch();
+  if(name==='psyche') renderPsyche();
+  if(name==='today') renderCosmicStrip();
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-/* DATE STRIP */
+/* DATE + COSMIC */
 function renderDateStrip(){
   const strip=document.getElementById('date-strip');
   const base=new Date(activeDate+'T12:00:00');
@@ -576,7 +805,7 @@ function renderDateStrip(){
     const has=u?.ledger[k] && Object.keys(u.ledger[k]).length;
     return `<button class="day-chip ${k===activeDate?'on':''} ${has?'dot':''}" data-d="${k}"><small>${d.toLocaleDateString(undefined,{weekday:'short'})}</small><b>${d.getDate()}</b></button>`;
   }).join('');
-  strip.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>{activeDate=b.dataset.d;renderDateStrip();paintPhases();fillForms();});
+  strip.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>{activeDate=b.dataset.d;renderDateStrip();paintPhases();fillForms();renderCosmicStrip();});
 }
 function paintPhases(){
   const e=entry();
@@ -586,8 +815,24 @@ function paintPhases(){
     p.classList.toggle('done',done);
   });
 }
+function renderCosmicStrip(){
+  const el=document.getElementById('cosmic-strip'); if(!el) return;
+  const p=profile();
+  const num=calcNumerology(p.dob,p.fullName||user()?.name);
+  const tarot=getDailyTarot();
+  const ruler=getDayRuler();
+  const hour=getPlanetaryHour();
+  el.innerHTML=`
+    <span class="pill">${tarot.primary.emoji} ${tarot.primary.name}</span>
+    <span class="pill">${ruler.emoji} ${ruler.name} day</span>
+    <span class="pill">${hour.emoji} ${hour.name} hour</span>
+    ${num.personalDay?`<span class="pill"><span class="iconify icon" data-icon="fluent-emoji:input-numbers"></span> Day ${num.personalDay}</span>`:`<button class="pill" id="cosmic-setup"><span class="iconify icon" data-icon="fluent-emoji:gear"></span> Set birth data</button>`}
+  `;
+  scan(el);
+  document.getElementById('cosmic-setup')?.addEventListener('click',openOnboarding);
+}
 
-/* DEFECT UI */
+/* DEFECTS */
 function buildDefects(){
   document.getElementById('defect-list').innerHTML=DEFECTS.map(d=>`
     <div class="counter" data-def="${d.id}">
@@ -606,13 +851,14 @@ function buildDefects(){
       entry()[id+'Count']=+el.textContent; save(); paintPhases();
     });
   });
-  if(window.Iconify) Iconify.scan(document.getElementById('defect-list'));
+  scan(document.getElementById('defect-list'));
 }
 
 /* FORMS */
 function fillForms(){
   const e=entry();
-  document.querySelectorAll('[data-k]').forEach(el=>{
+  document.querySelectorAll('.view [data-k]').forEach(el=>{
+    if(el.closest('#onboard')) return;
     const k=el.dataset.k;
     if(el.type==='checkbox') el.checked=!!e[k];
     else if(el.type==='range'){el.value=e[k]??el.value; syncSlider(el);}
@@ -639,36 +885,224 @@ function gatherFrom(root){
   const en=root.querySelector('input[name="energy"]:checked');
   if(en) e.energy=en.value;
   e.updatedAt=Date.now();
+  e.cosmic=(()=>{const tarot=getDailyTarot();const ruler=getDayRuler();const num=calcNumerology(profile().dob,profile().fullName||user()?.name);return {tarot:tarot.primary.name,dayRuler:ruler.name,personalDay:num.personalDay};})();
   save(); paintPhases(); renderDateStrip();
 }
 document.querySelectorAll('[data-save]').forEach(btn=>btn.onclick=()=>{
-  const view=document.getElementById('view-'+btn.dataset.save);
-  gatherFrom(view); toast('Saved · '+activeDate);
+  gatherFrom(document.getElementById('view-'+btn.dataset.save)); toast('Saved · '+activeDate);
 });
-document.querySelectorAll('input[type=range][data-k]').forEach(el=>{
-  el.addEventListener('input',()=>syncSlider(el));
-});
+document.querySelectorAll('input[type=range][data-k]').forEach(el=>el.addEventListener('input',()=>syncSlider(el)));
 function syncSlider(el){
   const map={sleep:'h',aware:'h',mech:'h',divinity:'',mood:'',conc:''};
   const b=document.querySelector(`[data-sv="${el.dataset.k}"]`);
   if(b) b.textContent=el.value+(map[el.dataset.k]||'');
 }
-document.querySelectorAll('[data-k], input[name="energy"]').forEach(el=>{
-  el.addEventListener('change',()=>{
-    const view=el.closest('.view'); if(view) gatherFrom(view);
-  });
-  if(el.tagName==='TEXTAREA'||el.tagName==='INPUT') el.addEventListener('blur',()=>{
-    const view=el.closest('.view'); if(view) gatherFrom(view);
-  });
+document.querySelectorAll('.view [data-k], input[name="energy"]').forEach(el=>{
+  el.addEventListener('change',()=>{const view=el.closest('.view'); if(view&&!view.id.includes('psyche')) gatherFrom(view);});
+  if(el.tagName==='TEXTAREA'||el.tagName==='INPUT') el.addEventListener('blur',()=>{const view=el.closest('.view'); if(view&&view.id.startsWith('view-')&&['view-morning','view-day','view-night','view-summary'].includes(view.id)) gatherFrom(view);});
 });
 
-/* SEARCH / GLORIAN */
+/* ONBOARDING */
+const OB_STEPS = [
+  {title:'Birth & identity',desc:'Anchors Chaldean numerology and life stages.',html:()=>`
+    <div class="field"><label>Full birth name</label><input id="ob-name" value="${esc(profile().fullName||user()?.name||'')}"></div>
+    <div class="grid2">
+      <div class="field"><label>Date of birth</label><input type="date" id="ob-dob" value="${esc(profile().dob||'')}"></div>
+      <div class="field"><label>Time of birth</label><input id="ob-tob" placeholder="14:30 or unknown" value="${esc(profile().tob||'')}"></div>
+    </div>
+    <div class="field"><label>Place of birth</label><input id="ob-pob" value="${esc(profile().pob||'')}"></div>
+    <div class="field"><label>Current location</label><input id="ob-loc" value="${esc(profile().location||'')}"></div>`},
+  {title:'Dominant centre',desc:'Samael: Intellectual · Emotional · Instinctual · Motor · Sexual.',html:()=>`
+    <div class="psych-type" id="ob-types">${Object.keys(PSYCH_TYPES).map(t=>`<button type="button" class="tag ${profile().type===t?'on':''}" data-type="${t}"><span class="iconify icon-lg" data-icon="${PSYCH_TYPES[t].icon}"></span>${t}</button>`).join('')}</div>
+    <div class="card" id="ob-type-info" style="margin-top:12px;font-size:.88rem;color:var(--ink2)">${profile().type?PSYCH_TYPES[profile().type].samael:'Select a centre.'}</div>
+    <div class="field" style="margin-top:12px"><label>Habitual patterns</label><textarea id="ob-patterns">${esc(profile().patternText||'')}</textarea></div>`},
+  {title:'Ego strongholds',desc:'Chief defects with radical honesty.',html:()=>`
+    <div id="ob-defects">${DEFECT_TAGS.map(d=>`<span class="tag ${(profile().selectedDefects||[]).includes(d.id)?'on':''}" data-defect="${d.id}"><span class="iconify icon" data-icon="${d.icon}"></span> ${d.title}</span>`).join('')}</div>
+    <div class="field" style="margin-top:12px"><label>Primary defect in depth</label><textarea id="ob-chief">${esc(profile().chiefDefect||'')}</textarea></div>`},
+  {title:'Behavioural patterns',desc:'Mechanical loops beyond obvious defects.',html:()=>`
+    <div id="ob-beh">${BEHAVIOURS.map(b=>`<span class="tag ${(profile().selectedBehaviours||[]).includes(b)?'on':''}" data-beh="${esc(b)}">${esc(b)}</span>`).join('')}</div>
+    <div class="field" style="margin-top:12px"><label>Most persistent pattern</label><textarea id="ob-beh-desc">${esc(profile().patternDesc||'')}</textarea></div>`},
+  {title:'Shadow',desc:'Unconscious basement — Jung / Samael.',html:()=>`
+    <div class="field"><label>Emotional wounds</label><textarea id="ob-shadow">${esc(profile().shadow||'')}</textarea></div>
+    <div class="field"><label>Charged triggers</label><textarea id="ob-triggers">${esc(profile().triggers||'')}</textarea></div>
+    <div class="field"><label>Core limiting belief</label><input id="ob-belief" value="${esc(profile().belief||'')}"></div>`},
+  {title:'Spiritual path',desc:'Teachers, practice, aim.',html:()=>`
+    <div class="field"><label>Teachers & lineages</label><input id="ob-teachers" value="${esc(profile().teachers||'')}" placeholder="Samael, Sivananda…"></div>
+    <div class="field"><label>Daily practices</label><textarea id="ob-practices">${esc(profile().practices||'')}</textarea></div>
+    <div class="field"><label>Aim this year</label><input id="ob-goal" value="${esc(profile().goal||'')}"></div>
+    <div class="field"><label>Vows</label><input id="ob-vows" value="${esc(profile().vows||'')}"></div>`},
+  {title:'Natal chart',desc:'Astrological coordinates you know.',html:()=>`
+    <div class="grid2">
+      <div class="field"><label>Sun</label><input id="ob-sun" value="${esc(profile().sun||'')}"></div>
+      <div class="field"><label>Moon</label><input id="ob-moon" value="${esc(profile().moon||'')}"></div>
+      <div class="field"><label>Rising</label><input id="ob-asc" value="${esc(profile().asc||'')}"></div>
+      <div class="field"><label>Mercury</label><input id="ob-mercury" value="${esc(profile().mercury||'')}"></div>
+      <div class="field"><label>Venus</label><input id="ob-venus" value="${esc(profile().venus||'')}"></div>
+      <div class="field"><label>Mars</label><input id="ob-mars" value="${esc(profile().mars||'')}"></div>
+    </div>
+    <div class="field"><label>Chart notes</label><textarea id="ob-chart">${esc(profile().chartNotes||'')}</textarea></div>`},
+  {title:'Depth questions',desc:'Semantic foundation for self-analysis.',html:()=>`
+    <div class="field"><label>Father imprint</label><input id="ob-father" value="${esc(profile().father||'')}"></div>
+    <div class="field"><label>Mother imprint</label><input id="ob-mother" value="${esc(profile().mother||'')}"></div>
+    <div class="field"><label>Relationship with sexual energy</label><input id="ob-sex" value="${esc(profile().sexuality||'')}"></div>
+    <div class="field"><label>Inner critic says…</label><input id="ob-critic" value="${esc(profile().critic||'')}"></div>
+    <div class="field"><label>Body tension map</label><input id="ob-body" value="${esc(profile().bodyHeld||'')}"></div>`},
+  {title:'Mapped',desc:'Your psyche profile feeds tarot, numbers, and pattern analysis.',html:()=>`
+    <div style="text-align:center;padding:20px 8px">
+      <span class="iconify icon-xl" data-icon="fluent-emoji:crystal-ball" style="width:64px;height:64px"></span>
+      <p style="font-family:var(--serif);font-size:1.3rem;margin:12px 0 6px">Ready</p>
+      <p style="color:var(--mute);font-size:.9rem">Edit anytime from Psyche or You.</p>
+    </div>`}
+];
+function openOnboarding(){obStep=0;document.getElementById('onboard').classList.add('open');renderOb();}
+function closeOnboarding(){saveOb();document.getElementById('onboard').classList.remove('open');save();renderCosmicStrip();renderPsyche();}
+function renderOb(){
+  const s=OB_STEPS[obStep];
+  document.getElementById('ob-title').textContent=s.title;
+  document.getElementById('ob-desc').textContent=s.desc;
+  document.getElementById('ob-dots').innerHTML=OB_STEPS.map((_,i)=>`<i class="${i<=obStep?'on':''}"></i>`).join('');
+  document.getElementById('ob-body').innerHTML=s.html();
+  document.getElementById('ob-prev').style.visibility=obStep? 'visible':'hidden';
+  document.getElementById('ob-next').textContent=obStep===OB_STEPS.length-1?'Finish':'Continue';
+  scan(document.getElementById('ob-body'));
+  document.querySelectorAll('#ob-types [data-type]').forEach(b=>b.onclick=()=>{
+    profile().type=b.dataset.type; save();
+    document.querySelectorAll('#ob-types .tag').forEach(t=>t.classList.toggle('on',t.dataset.type===b.dataset.type));
+    document.getElementById('ob-type-info').textContent=PSYCH_TYPES[b.dataset.type].samael;
+  });
+  document.querySelectorAll('#ob-defects [data-defect]').forEach(t=>t.onclick=()=>t.classList.toggle('on'));
+  document.querySelectorAll('#ob-beh [data-beh]').forEach(t=>t.onclick=()=>t.classList.toggle('on'));
+}
+function saveOb(){
+  const p=profile(); const g=id=>document.getElementById(id)?.value||'';
+  if(obStep===0){p.fullName=g('ob-name');p.dob=g('ob-dob');p.tob=g('ob-tob');p.pob=g('ob-pob');p.location=g('ob-loc');}
+  if(obStep===1){p.patternText=g('ob-patterns');}
+  if(obStep===2){p.selectedDefects=[...document.querySelectorAll('#ob-defects .tag.on')].map(t=>t.dataset.defect);p.chiefDefect=g('ob-chief');}
+  if(obStep===3){p.selectedBehaviours=[...document.querySelectorAll('#ob-beh .tag.on')].map(t=>t.dataset.beh);p.patternDesc=g('ob-beh-desc');}
+  if(obStep===4){p.shadow=g('ob-shadow');p.triggers=g('ob-triggers');p.belief=g('ob-belief');}
+  if(obStep===5){p.teachers=g('ob-teachers');p.practices=g('ob-practices');p.goal=g('ob-goal');p.vows=g('ob-vows');}
+  if(obStep===6){p.sun=g('ob-sun');p.moon=g('ob-moon');p.asc=g('ob-asc');p.mercury=g('ob-mercury');p.venus=g('ob-venus');p.mars=g('ob-mars');p.chartNotes=g('ob-chart');}
+  if(obStep===7){p.father=g('ob-father');p.mother=g('ob-mother');p.sexuality=g('ob-sex');p.critic=g('ob-critic');p.bodyHeld=g('ob-body');}
+  save();
+}
+document.getElementById('ob-next').onclick=()=>{if(obStep>=OB_STEPS.length-1){closeOnboarding();return;}saveOb();obStep++;renderOb();};
+document.getElementById('ob-prev').onclick=()=>{if(obStep>0){saveOb();obStep--;renderOb();}};
+document.getElementById('btn-open-profile').onclick=openOnboarding;
+document.getElementById('btn-edit-psyche').onclick=openOnboarding;
+
+/* PSYCHE RENDER */
+function renderPsyche(){
+  const p=profile();
+  const name=p.fullName||user()?.name||'';
+  const num=calcNumerology(p.dob,name);
+  const fields=[
+    {k:'lifePath',lbl:'Life Path'},{k:'destiny',lbl:'Destiny'},{k:'soul',lbl:'Soul Urge'},
+    {k:'personalYear',lbl:'Personal Year'},{k:'personalMonth',lbl:'Personal Month'},{k:'personalDay',lbl:'Personal Day'}
+  ];
+  const ng=document.getElementById('num-grid');
+  if(!p.dob){
+    ng.innerHTML=`<div class="card" style="grid-column:1/-1;text-align:center"><p style="margin-bottom:10px;color:var(--mute)">Set birthdate for Chaldean numbers</p><button class="btn btn-primary" style="width:auto" onclick="openOnboarding()">Open profile</button></div>`;
+  } else {
+    ng.innerHTML=fields.map(f=>{
+      const v=num[f.k]; const m=NUM_MEANINGS[v]||{};
+      return `<div class="num-card"><div class="big">${v??'—'}</div><small>${f.lbl}</small><p><span class="iconify icon" data-icon="${m.icon||'fluent-emoji:glowing-star'}"></span> ${esc(m.name||'')}<br>${esc(m.desc||'')}</p></div>`;
+    }).join('');
+  }
+  scan(ng);
+
+  const age=getAge(p.dob);
+  const ageCard=document.getElementById('age-card');
+  if(age!=null){
+    ageCard.style.display='block';
+    const stage=LIFE_STAGES.find(s=>age>=s.years[0]&&age<s.years[1])||LIFE_STAGES.at(-1);
+    document.getElementById('age-title').textContent=`${age} years`;
+    document.getElementById('age-stage').innerHTML=`<span class="iconify icon" data-icon="${stage.icon}"></span> ${stage.name} — ${stage.desc}`;
+    document.getElementById('age-bar').style.width=Math.min(100,age)+'%';
+    document.getElementById('life-stages').innerHTML=LIFE_STAGES.map(s=>{
+      const now=age>=s.years[0]&&age<s.years[1], past=age>=s.years[1];
+      return `<div class="stage ${now?'now':''} ${past?'past':''}"><span class="iconify icon" data-icon="${s.icon}"></span><b style="display:block;font-size:.85rem;margin:4px 0">${s.name}</b><small style="color:var(--mute)">${s.years[0]}–${s.years[1]}</small></div>`;
+    }).join('');
+    scan(ageCard);
+  } else ageCard.style.display='none';
+
+  const tarot=getDailyTarot();
+  document.getElementById('tarot-cards').innerHTML=[
+    {c:tarot.primary,l:'Primary'},{c:tarot.secondary,l:'Secondary'}
+  ].map(({c,l})=>`<div class="tarot"><div class="pill">${l}</div><span class="te">${c.emoji}</span><h4>${c.name}</h4><div class="meta">Arcanum ${c.n} · ${c.key} · ${c.planet}</div><p>${esc(c.desc)}</p><p style="margin-top:8px;font-style:italic;color:var(--leaf2)">${esc(c.interp)}</p></div>`).join('');
+
+  document.getElementById('arcana-mini').innerHTML=TAROT.map(t=>`<button type="button" title="${esc(t.interp)}"><span class="ae">${t.emoji}</span>${t.n}</button>`).join('');
+
+  const ruler=getDayRuler();
+  document.getElementById('planet-grid').innerHTML=PLANETS.map(pl=>`
+    <div class="planet ${pl.name===ruler.name?'on':''}"><span class="pe">${pl.emoji}</span><b>${pl.name}</b><small>${pl.day}</small></div>`).join('');
+  const hour=getPlanetaryHour();
+  document.getElementById('planet-hour').innerHTML=`
+    <div class="card-h"><div class="ico"><span style="font-size:1.4rem">${hour.emoji}</span></div><div><h3>${hour.name} hour now</h3><p>${hour.quality}</p></div></div>
+    <p style="font-size:.82rem;color:var(--mute)">Chaldean hour order: Saturn → Jupiter → Mars → Sun → Venus → Mercury → Moon. Align practice with the hour.</p>`;
+
+  const py=num.personalYear;
+  document.getElementById('yearly-box').innerHTML=`
+    ${py?`<div class="card"><div class="card-h"><div class="ico"><span class="iconify icon-lg" data-icon="fluent-emoji:spiral-calendar"></span></div><div><h3>Personal Year ${py}</h3><p>${esc(NUM_MEANINGS[py]?.name||'')} — ${esc(NUM_MEANINGS[py]?.desc||'')}</p></div></div>
+    <div class="bar"><i style="width:${(py/9)*100}%"></i></div>
+    <div style="display:grid;grid-template-columns:repeat(9,1fr);gap:4px;margin-top:12px">${[1,2,3,4,5,6,7,8,9].map(n=>`<div style="text-align:center;padding:8px 2px;border-radius:10px;border:1px solid ${n===py?'var(--leaf)':'var(--line)'};background:${n===py?'rgba(47,107,79,.1)':'#fff'}"><b style="font-family:var(--serif)">${n}</b></div>`).join('')}</div></div>`:'<div class="card hint">Add birthdate to unlock yearly cycle</div>'}`;
+  scan(document.getElementById('yearly-box'));
+
+  const pp=document.getElementById('psych-profile');
+  if(!p.type&&!p.chiefDefect&&!p.dob){
+    pp.innerHTML=`<div class="card hint">Complete profile setup ⚙️</div>`;
+  } else {
+    const type=p.type?PSYCH_TYPES[p.type]:null;
+    pp.innerHTML=`
+      ${type?`<div class="card"><div class="card-h"><div class="ico"><span class="iconify icon-lg" data-icon="${type.icon}"></span></div><div><h3>${esc(p.type)} centre</h3><p>${esc(type.samael)}</p></div></div></div>`:''}
+      ${p.chiefDefect?`<div class="card"><div class="card-h"><div class="ico"><span class="iconify icon-lg" data-icon="fluent-emoji:crossed-swords"></span></div><div><h3>Chief ego</h3><p>${esc(p.chiefDefect)}</p></div></div></div>`:''}
+      ${(p.selectedDefects||[]).length?`<div class="card">${p.selectedDefects.map(id=>{const d=DEFECT_TAGS.find(x=>x.id===id);return d?`<span class="tag on"><span class="iconify icon" data-icon="${d.icon}"></span>${d.title}</span>`:''}).join('')}</div>`:''}
+      ${(p.selectedBehaviours||[]).length?`<div class="card">${p.selectedBehaviours.map(b=>`<span class="tag on">${esc(b)}</span>`).join('')}</div>`:''}
+      ${p.belief?`<div class="card"><div class="card-h"><div class="ico"><span class="iconify icon-lg" data-icon="fluent-emoji:locked-with-key"></span></div><div><h3>Limiting belief</h3><p>“${esc(p.belief)}”</p></div></div></div>`:''}
+      ${p.shadow?`<div class="card"><div class="card-h"><div class="ico"><span class="iconify icon-lg" data-icon="fluent-emoji:new-moon-face"></span></div><div><h3>Shadow</h3><p>${esc(p.shadow)}</p></div></div></div>`:''}
+      ${(p.sun||p.moon||p.asc)?`<div class="card"><span class="tag on">☀️ ${esc(p.sun||'—')}</span><span class="tag on">🌙 ${esc(p.moon||'—')}</span><span class="tag on">⬆️ ${esc(p.asc||'—')}</span>
+        ${p.mercury?`<span class="tag">☿ ${esc(p.mercury)}</span>`:''}${p.venus?`<span class="tag">♀️ ${esc(p.venus)}</span>`:''}${p.mars?`<span class="tag">♂️ ${esc(p.mars)}</span>`:''}</div>`:''}
+      ${p.teachers?`<div class="card"><div class="card-h"><div class="ico"><span class="iconify icon-lg" data-icon="fluent-emoji:books"></span></div><div><h3>Lineage</h3><p>${esc(p.teachers)}</p></div></div></div>`:''}
+      ${p.goal?`<div class="card"><div class="card-h"><div class="ico"><span class="iconify icon-lg" data-icon="fluent-emoji:direct-hit"></span></div><div><h3>Annual aim</h3><p>${esc(p.goal)}</p></div></div></div>`:''}
+      ${(p.father||p.mother||p.critic)?`<div class="card" style="font-size:.88rem;color:var(--ink2)">
+        ${p.father?`<p><b>Father:</b> ${esc(p.father)}</p>`:''}
+        ${p.mother?`<p><b>Mother:</b> ${esc(p.mother)}</p>`:''}
+        ${p.sexuality?`<p><b>Sexual energy:</b> ${esc(p.sexuality)}</p>`:''}
+        ${p.critic?`<p><b>Inner critic:</b> ${esc(p.critic)}</p>`:''}
+        ${p.bodyHeld?`<p><b>Body:</b> ${esc(p.bodyHeld)}</p>`:''}
+      </div>`:''}`;
+    scan(pp);
+  }
+
+  const entries=Object.values(user()?.ledger||{});
+  const pat=document.getElementById('psych-patterns');
+  if(entries.length<5){
+    pat.innerHTML=`<div class="card hint">Log ${5-entries.length} more day(s) to unlock pattern analysis (${entries.length}/5)</div>`;
+  } else {
+    const counts={}; DEFECTS.forEach(d=>{counts[d.id]=entries.reduce((s,r)=>s+(+r[d.id+'Count']||0),0);});
+    const top=Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];
+    const topDef=DEFECTS.find(d=>d.id===top[0]);
+    const avgMood=entries.reduce((s,r)=>s+(+r.mood||5),0)/entries.length;
+    const energy={}; entries.forEach(r=>{if(r.energy) energy[r.energy]=(energy[r.energy]||0)+1;});
+    const topE=Object.entries(energy).sort((a,b)=>b[1]-a[1])[0];
+    const max=Math.max(...Object.values(counts),1);
+    pat.innerHTML=`
+      <div class="stat-row">
+        <div class="stat"><span class="iconify icon" data-icon="${topDef.icon}"></span><b>${top[1]}</b><small>${topDef.title}</small></div>
+        <div class="stat"><span class="iconify icon" data-icon="fluent-emoji:performing-arts"></span><b>${avgMood.toFixed(1)}</b><small>Avg mood</small></div>
+        <div class="stat"><span class="iconify icon" data-icon="fluent-emoji:high-voltage"></span><b>${topE?topE[1]:0}</b><small>${topE?topE[0]:'energy'}</small></div>
+      </div>
+      <div class="card">${DEFECTS.map(d=>`<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:.82rem"><span><span class="iconify icon" data-icon="${d.icon}"></span> ${d.title}</span><b>${counts[d.id]}</b></div><div class="bar"><i style="width:${(counts[d.id]/max)*100}%;background:var(--ember)"></i></div></div>`).join('')}</div>`;
+    scan(pat);
+  }
+}
+
+/* SEARCH */
 function renderGuides(){
   const g=document.getElementById('guide-grid');
   g.innerHTML=GUIDES.map(x=>`
     <button class="guide" data-g="${x.id}"><div class="gbg" style="background-image:${x.bg}"></div>
     <span><span class="iconify icon" data-icon="${x.icon}"></span> ${x.title}</span></button>`).join('');
-  if(window.Iconify) Iconify.scan(g);
+  scan(g);
   g.querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>showView(b.dataset.g));
 }
 document.getElementById('q').addEventListener('input',runSearch);
@@ -677,29 +1111,29 @@ function runSearch(){
   const box=document.getElementById('search-results');
   const article=document.getElementById('glorian-article');
   const u=user(); if(!u) return;
+  const psycheQ='numerology chaldean tarot planet astrology psyche profile life path destiny';
   const glorianHits=GUIDES.filter(g=>!q||g.title.toLowerCase().includes(q)||g.q.includes(q)||'glorian spiritual diary sivananda'.includes(q));
-  if(!q){
-    article.classList.remove('hidden');
-    box.innerHTML='';
-    return;
-  }
-  article.classList.toggle('hidden',!('spiritual diary glorian sivananda observed facts'.includes(q)||q.length<2));
+  if(!q){article.classList.remove('hidden');box.innerHTML='';return;}
+  article.classList.toggle('hidden',!(('spiritual diary glorian sivananda observed facts'.includes(q))||q.length<2));
   const hits=[];
   Object.entries(u.ledger).forEach(([date,row])=>{
     const blob=JSON.stringify(row).toLowerCase();
     if(blob.includes(q)||date.includes(q)) hits.push({date,row});
   });
+  const pblob=JSON.stringify(u.profile||{}).toLowerCase();
   hits.sort((a,b)=>b.date.localeCompare(a.date));
+  const psycheHit=psycheQ.includes(q)||pblob.includes(q)||'chaldean personal year'.includes(q);
   box.innerHTML=`
-    ${glorianHits.length?`<p class="pill" style="margin-bottom:10px"><span class="iconify icon" data-icon="fluent-emoji:open-book"></span> Glorian sections</p>`+glorianHits.map(g=>`
-      <button class="result" data-go="${g.id}"><div class="thumb" style="background-image:${g.bg};background-size:cover"></div><div><h4>${g.title}</h4><p>Open this phase of the diary</p></div></button>`).join(''):''}
-    <p class="pill" style="margin:12px 0 10px"><span class="iconify icon" data-icon="fluent-emoji:spiral-notepad"></span> Your entries · ${hits.length}</p>
+    ${psycheHit?`<button class="result" data-go="psyche"><div class="thumb" style="display:grid;place-items:center;background:#dfe5d8"><span class="iconify icon-lg" data-icon="fluent-emoji:crystal-ball"></span></div><div><h4>Psyche intelligence</h4><p>Numerology, planets, tarot, self-portrait</p></div></button>`:''}
+    ${glorianHits.length?`<p class="pill" style="margin-bottom:10px"><span class="iconify icon" data-icon="fluent-emoji:open-book"></span> Glorian</p>`+glorianHits.map(g=>`
+      <button class="result" data-go="${g.id}"><div class="thumb" style="background-image:${g.bg};background-size:cover"></div><div><h4>${g.title}</h4><p>Open this phase</p></div></button>`).join(''):''}
+    <p class="pill" style="margin:12px 0 10px"><span class="iconify icon" data-icon="fluent-emoji:spiral-notepad"></span> Entries · ${hits.length}</p>
     ${hits.slice(0,40).map(h=>`
       <button class="result" data-date="${h.date}">
         <div class="thumb" style="display:grid;place-items:center;font-family:var(--serif);font-size:1.2rem;background:#dfe5d8">${h.date.slice(8)}</div>
         <div><h4>${h.date}</h4><p>${esc(snippet(h.row,q))}</p></div>
       </button>`).join('')||'<p class="hint">No ledger matches.</p>'}`;
-  if(window.Iconify) Iconify.scan(box);
+  scan(box);
   box.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>showView(b.dataset.go));
   box.querySelectorAll('[data-date]').forEach(b=>b.onclick=()=>{activeDate=b.dataset.date;renderDateStrip();paintPhases();showView('today');});
 }
@@ -714,7 +1148,6 @@ function snippet(row,q){
 function renderTrends(){
   const u=user(); if(!u) return;
   const rows=Object.entries(u.ledger).sort((a,b)=>a[0].localeCompare(b[0])).slice(-30);
-  const days=rows.length;
   const avg=(arr)=>arr.length?(arr.reduce((a,b)=>a+b,0)/arr.length):0;
   const aware=rows.map(([,r])=>+r.aware||0);
   const mech=rows.map(([,r])=>+r.mech||0);
@@ -722,12 +1155,12 @@ function renderTrends(){
   const med=rows.map(([,r])=>+r.medMins||0);
   const defs=DEFECTS.map(d=>rows.reduce((s,[,r])=>s+(+r[d.id+'Count']||0),0));
   document.getElementById('stats').innerHTML=`
-    <div class="stat"><span class="iconify icon" data-icon="fluent-emoji:spiral-calendar"></span><b>${days}</b><small>Days</small></div>
+    <div class="stat"><span class="iconify icon" data-icon="fluent-emoji:spiral-calendar"></span><b>${rows.length}</b><small>Days</small></div>
     <div class="stat"><span class="iconify icon" data-icon="fluent-emoji:eye"></span><b>${avg(aware).toFixed(1)}h</b><small>Aware</small></div>
     <div class="stat"><span class="iconify icon" data-icon="fluent-emoji:bullseye"></span><b>${avg(conc).toFixed(1)}</b><small>Focus</small></div>
     <div class="stat"><span class="iconify icon" data-icon="fluent-emoji:person-in-lotus-position"></span><b>${Math.round(avg(med))}m</b><small>Meditate</small></div>
     <div class="stat"><span class="iconify icon" data-icon="fluent-emoji:crossed-swords"></span><b>${defs.reduce((a,b)=>a+b,0)}</b><small>Defects</small></div>`;
-  if(window.Iconify) Iconify.scan(document.getElementById('stats'));
+  scan(document.getElementById('stats'));
   const labels=rows.map(([k])=>k.slice(5));
   mk('c-aware',{type:'bar',data:{labels,datasets:[
     {label:'Aware',data:aware,backgroundColor:'#2f6b4f99'},
@@ -743,11 +1176,9 @@ function mk(id,cfg){if(charts[id])charts[id].destroy();const el=document.getElem
 
 document.getElementById('btn-export').onclick=()=>{
   const u=user(); if(!u) return;
-  const blob=new Blob([JSON.stringify({name:u.name,ledger:u.ledger,exported:new Date().toISOString()},null,2)],{type:'application/json'});
+  const blob=new Blob([JSON.stringify({name:u.name,profile:u.profile,ledger:u.ledger,numerology:calcNumerology(u.profile?.dob,u.profile?.fullName||u.name),exported:new Date().toISOString()},null,2)],{type:'application/json'});
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`gnostic_${u.name}_${activeDate}.json`; a.click();
 };
-
-function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 
 /* BOOT */
 buildDefects();
