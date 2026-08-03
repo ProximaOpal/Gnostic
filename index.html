@@ -143,7 +143,7 @@ img{max-width:100%;display:block}
 .guide::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent,rgba(0,0,0,.7))}
 .guide span{position:relative;z-index:1;display:block;padding:14px;font-family:var(--serif);font-size:1.05rem}
 
-/* TRENDS */
+/* TRENDS — dark dashboard */
 .stat-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-bottom:16px}
 .stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;text-align:center}
 .stat .icon{width:1.8rem;height:1.8rem;margin-bottom:4px}
@@ -151,6 +151,73 @@ img{max-width:100%;display:block}
 .stat small{color:var(--mute);font-size:.72rem;text-transform:uppercase;letter-spacing:.06em}
 .chart-card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px;margin-bottom:12px;height:240px}
 .chart-card h3{font-size:.85rem;color:var(--mute);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+
+#view-trends{
+  --td-bg:#1a1c24; --td-panel:#22252f; --td-text:#f4f5f7; --td-mute:#8b90a0;
+  --td-cyan:#3de0d0; --td-lime:#7dff9a; --td-amber:#f0c94d; --td-line:rgba(255,255,255,.08);
+  background:var(--td-bg); color:var(--td-text); min-height:calc(100vh - 64px); padding:0 0 24px;
+}
+#view-trends .dash-wrap{max-width:1100px;margin:0 auto;padding:8px 18px 40px}
+#view-trends .dash-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 0 18px;flex-wrap:wrap}
+#view-trends .dash-brand{display:flex;align-items:center;gap:10px;font-weight:560;letter-spacing:.02em}
+#view-trends .dash-brand .mark{width:36px;height:36px;border-radius:12px;background:rgba(61,224,208,.12);display:grid;place-items:center;color:var(--td-cyan)}
+#view-trends .dash-user{display:flex;align-items:center;gap:10px;color:var(--td-mute);font-size:.92rem}
+#view-trends .dash-user img,#view-trends .dash-user .av{width:36px;height:36px;border-radius:50%;object-fit:cover;background:#2e3340}
+#view-trends .dash-grid{display:grid;grid-template-columns:1fr 280px;gap:18px;align-items:start}
+@media(max-width:860px){#view-trends .dash-grid{grid-template-columns:1fr}}
+#view-trends .dash-main{min-width:0}
+#view-trends .dash-head h1{font-family:var(--sans);font-weight:600;font-size:clamp(1.6rem,3.5vw,2rem);letter-spacing:-.02em;margin-bottom:8px}
+#view-trends .dash-head p{color:var(--td-mute);font-size:.9rem;max-width:52ch;line-height:1.5;margin-bottom:16px}
+#view-trends .legend{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-bottom:14px;font-size:.82rem;color:var(--td-mute)}
+#view-trends .legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:middle}
+#view-trends .legend .y{background:var(--td-amber);box-shadow:0 0 8px var(--td-amber)}
+#view-trends .legend .g{background:var(--td-lime);box-shadow:0 0 8px var(--td-lime)}
+#view-trends .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+#view-trends .filters button{padding:8px 16px;border-radius:999px;border:1px solid transparent;background:transparent;color:var(--td-mute);font-size:.82rem}
+#view-trends .filters button.on{border-color:var(--td-cyan);color:var(--td-text);box-shadow:0 0 0 1px rgba(61,224,208,.25),inset 0 0 20px rgba(61,224,208,.06)}
+#view-trends .radar-panel{
+  background:radial-gradient(ellipse at center,rgba(61,224,208,.06),transparent 60%),var(--td-panel);
+  border:1px solid var(--td-line);border-radius:24px;padding:18px;margin-bottom:16px;position:relative;overflow:hidden;
+}
+#view-trends .radar-panel::before{
+  content:'';position:absolute;inset:0;opacity:.35;pointer-events:none;
+  background-image:radial-gradient(rgba(255,255,255,.04) 1px,transparent 1px);background-size:18px 18px;
+}
+#view-trends .radar-wrap{position:relative;height:min(360px,55vw);max-height:380px}
+#view-trends .radar-labels{position:absolute;inset:0;pointer-events:none;z-index:2;font-size:.72rem;color:var(--td-mute);text-transform:uppercase;letter-spacing:.06em}
+#view-trends .radar-labels span{position:absolute;display:flex;flex-direction:column;align-items:center;gap:2px}
+#view-trends .radar-labels b{color:var(--td-text);font-size:.95rem;font-weight:600;letter-spacing:0;text-transform:none}
+#view-trends .radar-labels .t{top:4%;left:50%;transform:translateX(-50%)}
+#view-trends .radar-labels .r{top:50%;right:2%;transform:translateY(-50%);align-items:flex-end}
+#view-trends .radar-labels .b{bottom:4%;left:50%;transform:translateX(-50%)}
+#view-trends .radar-labels .l{top:50%;left:2%;transform:translateY(-50%);align-items:flex-start}
+#view-trends .line-panel{background:var(--td-panel);border:1px solid var(--td-line);border-radius:24px;padding:16px 14px 10px;position:relative}
+#view-trends .line-wrap{position:relative;height:200px}
+#view-trends .line-wrap canvas{filter:drop-shadow(0 0 6px rgba(61,224,208,.55))}
+#view-trends .side-panel{background:var(--td-panel);border:1px solid var(--td-line);border-radius:24px;padding:18px 16px;position:sticky;top:72px}
+#view-trends .side-panel h3{font-size:.95rem;font-weight:560;margin-bottom:16px}
+#view-trends .act-feed{position:relative;padding-left:8px;max-height:520px;overflow:auto}
+#view-trends .act-feed::before{content:'';position:absolute;left:22px;top:8px;bottom:8px;width:1px;background:var(--td-line)}
+#view-trends .act{display:grid;grid-template-columns:36px 1fr;gap:10px;margin-bottom:16px;position:relative;cursor:pointer;text-align:left;width:100%;background:none;border:none;color:inherit;padding:0}
+#view-trends .act .av{width:36px;height:36px;border-radius:50%;background:#2e3340;display:grid;place-items:center;overflow:hidden;z-index:1;border:2px solid var(--td-panel)}
+#view-trends .act .av img{width:100%;height:100%;object-fit:cover}
+#view-trends .act .meta{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+#view-trends .act .meta strong{font-size:.88rem;font-weight:560}
+#view-trends .act .meta time{font-size:.72rem;color:var(--td-mute);white-space:nowrap}
+#view-trends .act p{font-size:.78rem;color:var(--td-mute);margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.4}
+#view-trends .act-more{display:block;width:100%;text-align:center;margin-top:8px;padding:10px;color:var(--td-cyan);font-size:.82rem;background:none;border:none}
+#view-trends .micro-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+@media(max-width:560px){#view-trends .micro-stats{grid-template-columns:repeat(2,1fr)}}
+#view-trends .micro{background:rgba(255,255,255,.03);border:1px solid var(--td-line);border-radius:14px;padding:12px;text-align:center}
+#view-trends .micro b{display:block;font-size:1.15rem;color:var(--td-cyan);font-weight:600}
+#view-trends .micro small{color:var(--td-mute);font-size:.68rem;text-transform:uppercase;letter-spacing:.05em}
+body.trends-on .top{background:rgba(26,28,36,.92);border-bottom-color:rgba(255,255,255,.06);color:var(--td-text,#f4f5f7)}
+body.trends-on .top .logo{color:#f4f5f7}
+body.trends-on .top .who{color:#8b90a0}
+body.trends-on .nav{background:rgba(26,28,36,.96);border-top-color:rgba(255,255,255,.06)}
+body.trends-on .nav button{color:#8b90a0}
+body.trends-on .nav button.on{color:#3de0d0;background:rgba(61,224,208,.1)}
+body.trends-on{background:#1a1c24}
 
 .toast{position:fixed;left:50%;bottom:100px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:10px 16px;border-radius:999px;opacity:0;pointer-events:none;transition:.25s;z-index:80;font-size:.9rem;display:flex;align-items:center;gap:8px}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -486,12 +553,44 @@ img{max-width:100%;display:block}
 
   <!-- TRENDS -->
   <div id="view-trends" class="view">
-    <div class="wrap">
-      <div class="section-title"><span class="iconify icon-xl" data-icon="fluent-emoji:chart-increasing"></span> Trends</div>
-      <div class="stat-row" id="stats"></div>
-      <div class="chart-card"><h3><span class="iconify icon" data-icon="fluent-emoji:eye"></span> Aware vs mechanical</h3><canvas id="c-aware"></canvas></div>
-      <div class="chart-card"><h3><span class="iconify icon" data-icon="fluent-emoji:crossed-swords"></span> Defects</h3><canvas id="c-def"></canvas></div>
-      <div class="chart-card"><h3><span class="iconify icon" data-icon="fluent-emoji:bullseye"></span> Concentration</h3><canvas id="c-conc"></canvas></div>
+    <div class="dash-wrap">
+      <div class="dash-top">
+        <div class="dash-brand"><div class="mark"><span class="iconify icon" data-icon="fluent-emoji:chart-increasing"></span></div> Gnostic</div>
+        <div class="dash-user" id="trends-user"></div>
+      </div>
+      <div class="dash-grid">
+        <div class="dash-main">
+          <div class="dash-head">
+            <h1>Statistical analysis</h1>
+            <p>Sadhana pulse across awareness, focus, meditation, and mood — compared with your mechanical baseline.</p>
+          </div>
+          <div class="legend">
+            <span><i class="y"></i> Mechanical baseline</span>
+            <span><i class="g"></i> Your practice</span>
+          </div>
+          <div class="filters" id="trend-filters">
+            <button type="button" data-range="7">7 days</button>
+            <button type="button" data-range="30" class="on">30 days</button>
+            <button type="button" data-range="90">90 days</button>
+            <button type="button" data-range="0">All time</button>
+          </div>
+          <div class="micro-stats" id="stats"></div>
+          <div class="radar-panel">
+            <div class="radar-wrap">
+              <div class="radar-labels" id="radar-labels"></div>
+              <canvas id="c-radar"></canvas>
+            </div>
+          </div>
+          <div class="line-panel">
+            <div class="line-wrap"><canvas id="c-line"></canvas></div>
+          </div>
+        </div>
+        <aside class="side-panel">
+          <h3>Latest activity</h3>
+          <div class="act-feed" id="act-feed"></div>
+          <button type="button" class="act-more" id="act-more">See all activity →</button>
+        </aside>
+      </div>
     </div>
   </div>
 
@@ -759,6 +858,7 @@ function enter(id){
 }
 function logout(){
   state.active=null; save();
+  document.body.classList.remove('trends-on');
   document.getElementById('app').style.display='none';
   document.getElementById('auth').style.display='grid';
   document.getElementById('auth-signin').classList.add('hidden');
@@ -785,6 +885,7 @@ function showView(name){
   document.getElementById(map[name]||'view-today').classList.add('on');
   const navs=['today','psyche','search','trends','you'];
   document.querySelectorAll('.nav [data-view]').forEach(b=>b.classList.toggle('on',navs.includes(name)&&b.dataset.view===name));
+  document.body.classList.toggle('trends-on', name==='trends');
   if(['morning','day','night','summary'].includes(name)) fillForms();
   if(name==='trends') renderTrends();
   if(name==='search') runSearch();
@@ -1145,32 +1246,131 @@ function snippet(row,q){
 }
 
 /* TRENDS */
+let chartRange = 30;
+document.getElementById('trend-filters')?.addEventListener('click',e=>{
+  const b=e.target.closest('[data-range]'); if(!b) return;
+  chartRange=+b.dataset.range;
+  document.querySelectorAll('#trend-filters button').forEach(x=>x.classList.toggle('on',x===b));
+  renderTrends();
+});
+document.getElementById('act-more')?.addEventListener('click',()=>showView('today'));
+
+function filteredRows(){
+  const u=user(); if(!u) return [];
+  const all=Object.entries(u.ledger).sort((a,b)=>a[0].localeCompare(b[0]));
+  if(!chartRange) return all;
+  const cut=new Date(); cut.setDate(cut.getDate()-chartRange);
+  const cutKey=dateKey(cut);
+  return all.filter(([k])=>k>=cutKey);
+}
 function renderTrends(){
   const u=user(); if(!u) return;
-  const rows=Object.entries(u.ledger).sort((a,b)=>a[0].localeCompare(b[0])).slice(-30);
+  const rows=filteredRows();
   const avg=(arr)=>arr.length?(arr.reduce((a,b)=>a+b,0)/arr.length):0;
   const aware=rows.map(([,r])=>+r.aware||0);
   const mech=rows.map(([,r])=>+r.mech||0);
   const conc=rows.map(([,r])=>+r.conc||0);
   const med=rows.map(([,r])=>+r.medMins||0);
-  const defs=DEFECTS.map(d=>rows.reduce((s,[,r])=>s+(+r[d.id+'Count']||0),0));
+  const mood=rows.map(([,r])=>+r.mood||0);
+  const defs=DEFECTS.reduce((s,d)=>s+rows.reduce((a,[,r])=>a+(+r[d.id+'Count']||0),0),0);
+
+  const tu=document.getElementById('trends-user');
+  tu.innerHTML=`Hi, ${esc(u.name)} ${u.avatar?`<img src="${u.avatar}" alt="">`:`<span class="av"><span class="iconify icon" data-icon="fluent-emoji:bust-in-silhouette"></span></span>`}`;
+  scan(tu);
+
+  const aAware=avg(aware), aMech=avg(mech), aConc=avg(conc), aMed=avg(med), aMood=avg(mood);
+  // Normalize to 0–100 for radar
+  const youRadar=[
+    Math.min(100,(aAware/16)*100),
+    Math.min(100,(aConc/10)*100),
+    Math.min(100,(aMed/60)*100),
+    Math.min(100,(aMood/10)*100)
+  ].map(v=>Math.round(v||0));
+  const baseRadar=[
+    Math.min(100,(aMech/16)*100),
+    35,
+    20,
+    Math.max(20,100-youRadar[3])
+  ].map(v=>Math.round(v||0));
+
+  document.getElementById('radar-labels').innerHTML=`
+    <span class="t">Awareness<b>${youRadar[0]}</b></span>
+    <span class="r">Focus<b>${youRadar[1]}</b></span>
+    <span class="b">Mood<b>${youRadar[3]}</b></span>
+    <span class="l">Meditation<b>${youRadar[2]}</b></span>`;
+
   document.getElementById('stats').innerHTML=`
-    <div class="stat"><span class="iconify icon" data-icon="fluent-emoji:spiral-calendar"></span><b>${rows.length}</b><small>Days</small></div>
-    <div class="stat"><span class="iconify icon" data-icon="fluent-emoji:eye"></span><b>${avg(aware).toFixed(1)}h</b><small>Aware</small></div>
-    <div class="stat"><span class="iconify icon" data-icon="fluent-emoji:bullseye"></span><b>${avg(conc).toFixed(1)}</b><small>Focus</small></div>
-    <div class="stat"><span class="iconify icon" data-icon="fluent-emoji:person-in-lotus-position"></span><b>${Math.round(avg(med))}m</b><small>Meditate</small></div>
-    <div class="stat"><span class="iconify icon" data-icon="fluent-emoji:crossed-swords"></span><b>${defs.reduce((a,b)=>a+b,0)}</b><small>Defects</small></div>`;
-  scan(document.getElementById('stats'));
-  const labels=rows.map(([k])=>k.slice(5));
-  mk('c-aware',{type:'bar',data:{labels,datasets:[
-    {label:'Aware',data:aware,backgroundColor:'#2f6b4f99'},
-    {label:'Mech',data:mech,backgroundColor:'#b85c3899'}
-  ]},options:chartOpts()});
-  mk('c-def',{type:'doughnut',data:{labels:DEFECTS.map(d=>d.title),datasets:[{data:defs,backgroundColor:['#6b7864','#b85c38','#9a7b3c','#2f6b4f','#3d4a38']}]},options:{...chartOpts(),scales:undefined,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}}}});
-  mk('c-conc',{type:'line',data:{labels,datasets:[{label:'Conc',data:conc,borderColor:'#2f6b4f',tension:.35,fill:false}]},options:{...chartOpts(),scales:{...chartOpts().scales,y:{min:0,max:10,ticks:{color:'#6b7864'}}}}});
-}
-function chartOpts(){
-  return {responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#6b7864',font:{family:'Outfit',size:11}}}},scales:{x:{ticks:{color:'#6b7864',maxTicksLimit:8},grid:{color:'rgba(0,0,0,.04)'}},y:{ticks:{color:'#6b7864'},grid:{color:'rgba(0,0,0,.04)'}}}};
+    <div class="micro"><b>${rows.length}</b><small>Days</small></div>
+    <div class="micro"><b>${aAware.toFixed(1)}h</b><small>Aware</small></div>
+    <div class="micro"><b>${aConc.toFixed(1)}</b><small>Focus</small></div>
+    <div class="micro"><b>${defs}</b><small>Defects</small></div>`;
+
+  const darkOpts={
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{backgroundColor:'#2a2e3a',titleColor:'#fff',bodyColor:'#c8ccd8',borderColor:'rgba(61,224,208,.3)',borderWidth:1}},
+  };
+  mk('c-radar',{type:'radar',data:{
+    labels:['Awareness','Focus','Meditation','Mood'],
+    datasets:[
+      {label:'Mechanical',data:baseRadar,backgroundColor:'rgba(240,201,77,.18)',borderColor:'rgba(240,201,77,.75)',borderWidth:1.5,pointBackgroundColor:'#f0c94d',pointRadius:3},
+      {label:'Practice',data:youRadar,backgroundColor:'rgba(125,255,154,.22)',borderColor:'#7dff9a',borderWidth:2,pointBackgroundColor:'#7dff9a',pointRadius:4,pointHoverRadius:6}
+    ]
+  },options:{...darkOpts,scales:{r:{
+    min:0,max:100,ticks:{display:false,backdropColor:'transparent'},
+    grid:{color:'rgba(255,255,255,.08)'},
+    angleLines:{color:'rgba(255,255,255,.1)'},
+    pointLabels:{display:false}
+  }}}});
+
+  // Glowing line: composite awareness score over time
+  const labels=rows.map(([k])=>{
+    const d=new Date(k+'T12:00:00');
+    return d.toLocaleDateString(undefined,{month:'short',day:'numeric'});
+  });
+  const series=rows.map(([,r])=>{
+    const aw=(+r.aware||0)*6;
+    const c=(+r.conc||0)*8;
+    const m=(+r.medMins||0)*1.2;
+    const mo=(+r.mood||0)*6;
+    return Math.round(aw+c+m+mo);
+  });
+  const ctx=document.getElementById('c-line')?.getContext('2d');
+  let grad=null;
+  if(ctx){
+    grad=ctx.createLinearGradient(0,0,0,200);
+    grad.addColorStop(0,'rgba(61,224,208,.35)');
+    grad.addColorStop(1,'rgba(61,224,208,0)');
+  }
+  mk('c-line',{type:'line',data:{labels,datasets:[{
+    label:'Sadhana pulse',data:series.length?series:[0],
+    borderColor:'#3de0d0',backgroundColor:grad||'rgba(61,224,208,.2)',
+    borderWidth:2.5,tension:.45,fill:true,pointRadius:0,pointHoverRadius:5,pointHoverBackgroundColor:'#3de0d0'
+  }]},options:{...darkOpts,scales:{
+    x:{ticks:{color:'#8b90a0',maxTicksLimit:8,font:{size:10}},grid:{color:'rgba(255,255,255,.04)',drawBorder:false}},
+    y:{ticks:{color:'#8b90a0',font:{size:10}},grid:{color:'rgba(255,255,255,.06)',drawBorder:false},beginAtZero:true}
+  }}});
+
+  // Activity feed
+  const feed=document.getElementById('act-feed');
+  const recent=[...rows].reverse().slice(0,12);
+  if(!recent.length){
+    feed.innerHTML=`<p style="color:var(--td-mute);font-size:.85rem;padding:8px">No entries yet — log a day to see activity.</p>`;
+  } else {
+    feed.innerHTML=recent.map(([k,r])=>{
+      const d=new Date(k+'T12:00:00');
+      const when=d.toLocaleDateString(undefined,{day:'numeric',month:'short'});
+      const bits=[r.morningPractice,r.study,r.virtue,r.retro,r.tomorrow,r.medDetail].filter(Boolean);
+      const snip=bits[0]||(r.energy?`Energy → ${r.energy}`:`Aware ${r.aware||0}h · Focus ${r.conc||0}`);
+      return `<button type="button" class="act" data-date="${k}">
+        <div class="av">${u.avatar?`<img src="${u.avatar}" alt="">`:`<span class="iconify icon" data-icon="fluent-emoji:spiral-notepad"></span>`}</div>
+        <div><div class="meta"><strong>${esc(u.name)}</strong><time>${when}</time></div><p>${esc(String(snip).slice(0,110))}</p></div>
+      </button>`;
+    }).join('');
+    scan(feed);
+    feed.querySelectorAll('[data-date]').forEach(b=>b.onclick=()=>{
+      activeDate=b.dataset.date; renderDateStrip(); paintPhases(); showView('today');
+    });
+  }
 }
 function mk(id,cfg){if(charts[id])charts[id].destroy();const el=document.getElementById(id);if(el)charts[id]=new Chart(el,cfg);}
 
