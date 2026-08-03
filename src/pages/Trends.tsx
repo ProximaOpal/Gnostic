@@ -5,6 +5,7 @@ import {
 } from 'chart.js';
 import { Line, Bar, Doughnut, Radar, Scatter } from 'react-chartjs-2';
 import { Shell } from '@/components/Shell';
+import { ModeToggle } from '@/components/ModeToggle';
 import { useStore } from '@/context/StoreContext';
 import { dateKey } from '@/lib/store';
 import { DEFECTS } from '@/lib/types';
@@ -17,9 +18,12 @@ const AMBER = '#c9a227';
 const BLUE = '#0894ce';
 const ROSE = '#e85d4c';
 
+type Section = 'overview' | 'practice' | 'defects' | 'body' | 'feed';
+
 export function TrendsPage() {
   const { user } = useStore();
   const [range, setRange] = useState(30);
+  const [section, setSection] = useState<Section>('overview');
 
   const rows = useMemo(() => {
     const all = Object.entries(user?.ledger || {}).sort((a, b) => a[0].localeCompare(b[0]));
@@ -80,13 +84,17 @@ export function TrendsPage() {
       <h2>Statistical analysis</h2>
       <p className="sub">Sadhana pulse — awareness, defects, conduct, sleep, energy, meditation.</p>
 
-      <div className="gx-tabs">
-        {[7, 30, 90, 365, 0].map((n) => (
-          <button key={n} className={`gx-tab ${range === n ? 'on' : ''}`} onClick={() => setRange(n)}>
-            {n === 0 ? 'All' : n === 365 ? 'Year' : `${n}d`}
-          </button>
-        ))}
-      </div>
+      <ModeToggle
+        value={String(range)}
+        onChange={(id) => setRange(Number(id))}
+        options={[
+          { id: '7', label: '7d' },
+          { id: '30', label: '30d' },
+          { id: '90', label: '90d' },
+          { id: '365', label: 'Year' },
+          { id: '0', label: 'All' },
+        ]}
+      />
 
       <div className="gx-stats">
         <div className="gx-stat"><b>{rows.length}</b><small>Days</small></div>
@@ -99,123 +107,153 @@ export function TrendsPage() {
         <div className="gx-stat"><b>{avg(sleep).toFixed(1)}h</b><small>Sleep</small></div>
       </div>
 
-      <div className="gx-chart-grid">
-        <div className="gx-chart-card span2">
-          <h3>Practice radar</h3>
-          <div className="gx-chart-wrap tall">
-            <Radar data={{
-              labels: ['Awareness', 'Focus', 'Meditation', 'Mood'],
-              datasets: [
-                { label: 'Mechanical', data: baseRadar, backgroundColor: 'rgba(201,162,39,.15)', borderColor: AMBER, pointBackgroundColor: AMBER },
-                { label: 'Practice', data: youRadar, backgroundColor: 'rgba(6,201,122,.18)', borderColor: MINT, pointBackgroundColor: MINT },
-              ],
-            }} options={{ ...common, scales: { r: { min: 0, max: 100, ticks: { display: false }, grid: { color: 'rgba(0,0,0,.06)' }, pointLabels: { color: '#6b7280' } } } }} />
-          </div>
-        </div>
+      <ModeToggle
+        value={section}
+        onChange={(id) => setSection(id as Section)}
+        options={[
+          { id: 'overview', label: 'Overview' },
+          { id: 'practice', label: 'Practice' },
+          { id: 'defects', label: 'Defects' },
+          { id: 'body', label: 'Body' },
+          { id: 'feed', label: 'Feed' },
+        ]}
+      />
 
-        <div className="gx-chart-card span2">
-          <h3>Sadhana pulse</h3>
-          <div className="gx-chart-wrap pulse">
-            <Line data={{
-              labels,
-              datasets: [{ label: 'Pulse', data: pulse.length ? pulse : [0], borderColor: BLUE, backgroundColor: 'rgba(8,148,206,.15)', fill: true, tension: 0.42, pointRadius: 0, borderWidth: 3 }],
-            }} options={common} />
+      {section === 'overview' && (
+        <div className="gx-chart-grid">
+          <div className="gx-chart-card span2">
+            <h3>Practice radar</h3>
+            <div className="gx-chart-wrap tall">
+              <Radar data={{
+                labels: ['Awareness', 'Focus', 'Meditation', 'Mood'],
+                datasets: [
+                  { label: 'Mechanical', data: baseRadar, backgroundColor: 'rgba(201,162,39,.15)', borderColor: AMBER, pointBackgroundColor: AMBER },
+                  { label: 'Practice', data: youRadar, backgroundColor: 'rgba(6,201,122,.18)', borderColor: MINT, pointBackgroundColor: MINT },
+                ],
+              }} options={{ ...common, scales: { r: { min: 0, max: 100, ticks: { display: false }, grid: { color: 'rgba(0,0,0,.06)' }, pointLabels: { color: '#6b7280' } } } }} />
+            </div>
+          </div>
+          <div className="gx-chart-card span2">
+            <h3>Sadhana pulse</h3>
+            <div className="gx-chart-wrap pulse">
+              <Line data={{
+                labels,
+                datasets: [{ label: 'Pulse', data: pulse.length ? pulse : [0], borderColor: BLUE, backgroundColor: 'rgba(8,148,206,.15)', fill: true, tension: 0.42, pointRadius: 0, borderWidth: 3 }],
+              }} options={common} />
+            </div>
           </div>
         </div>
+      )}
 
-        <div className="gx-chart-card span2">
-          <h3>Conscious vs mechanical</h3>
-          <div className="gx-chart-wrap tall">
-            <Bar data={{
-              labels,
-              datasets: [
-                { label: 'Conscious', data: aware, backgroundColor: 'rgba(8,148,206,.7)', stack: 's' },
-                { label: 'Mechanical', data: mech, backgroundColor: 'rgba(232,93,76,.55)', stack: 's' },
-              ],
-            }} options={{ ...common, scales: { ...common.scales, x: { ...common.scales.x, stacked: true }, y: { ...common.scales.y, stacked: true, max: 24 } } }} />
+      {section === 'practice' && (
+        <div className="gx-chart-grid">
+          <div className="gx-chart-card span2">
+            <h3>Conscious vs mechanical</h3>
+            <div className="gx-chart-wrap tall">
+              <Bar data={{
+                labels,
+                datasets: [
+                  { label: 'Conscious', data: aware, backgroundColor: 'rgba(8,148,206,.7)', stack: 's' },
+                  { label: 'Mechanical', data: mech, backgroundColor: 'rgba(232,93,76,.55)', stack: 's' },
+                ],
+              }} options={{ ...common, scales: { ...common.scales, x: { ...common.scales.x, stacked: true }, y: { ...common.scales.y, stacked: true, max: 24 } } }} />
+            </div>
+          </div>
+          <div className="gx-chart-card">
+            <h3>Concentration</h3>
+            <div className="gx-chart-wrap">
+              <Line data={{ labels, datasets: [{ label: 'Conc', data: conc, borderColor: BLUE, tension: 0.4, fill: true, backgroundColor: 'rgba(8,148,206,.1)', pointRadius: 2 }] }} options={{ ...common, scales: { ...common.scales, y: { ...common.scales.y, min: 0, max: 10 } } }} />
+            </div>
+          </div>
+          <div className="gx-chart-card">
+            <h3>Meditation minutes</h3>
+            <div className="gx-chart-wrap">
+              <Bar data={{ labels, datasets: [{ label: 'Min', data: med, backgroundColor: 'rgba(201,162,39,.7)' }] }} options={common} />
+            </div>
+          </div>
+          <div className="gx-chart-card">
+            <h3>Aware vs mechanical avg</h3>
+            <div className="gx-chart-wrap">
+              <Doughnut data={{ labels: ['Aware', 'Mechanical'], datasets: [{ data: [avg(aware), avg(mech)], backgroundColor: [BLUE, ROSE], borderWidth: 0 }] }} options={{ ...common, scales: undefined }} />
+            </div>
           </div>
         </div>
+      )}
 
-        <div className="gx-chart-card">
-          <h3>Defect breakdown</h3>
-          <div className="gx-chart-wrap">
-            <Doughnut data={{ labels: DEFECTS.map((d) => d.title), datasets: [{ data: defectTotals, backgroundColor: [ROSE, AMBER, MINT, BLUE, NAVY], borderWidth: 0 }] }} options={{ ...common, scales: undefined }} />
+      {section === 'defects' && (
+        <div className="gx-chart-grid">
+          <div className="gx-chart-card">
+            <h3>Defect breakdown</h3>
+            <div className="gx-chart-wrap">
+              <Doughnut data={{ labels: DEFECTS.map((d) => d.title), datasets: [{ data: defectTotals, backgroundColor: [ROSE, AMBER, MINT, BLUE, NAVY], borderWidth: 0 }] }} options={{ ...common, scales: undefined }} />
+            </div>
+          </div>
+          <div className="gx-chart-card span2">
+            <h3>Egoic triggers / day</h3>
+            <div className="gx-chart-wrap">
+              <Line data={{ labels, datasets: [{ label: 'Triggers', data: totalDef, borderColor: ROSE, fill: true, backgroundColor: 'rgba(232,93,76,.12)', tension: 0.4, pointRadius: 2 }] }} options={common} />
+            </div>
+          </div>
+          <div className="gx-chart-card span2">
+            <h3>Individual defect trends</h3>
+            <div className="gx-chart-wrap tall">
+              <Line data={{
+                labels,
+                datasets: DEFECTS.map((d, i) => ({
+                  label: d.title,
+                  data: rows.map(([, r]) => Number((r as Record<string, unknown>)[`${d.id}Count`]) || 0),
+                  borderColor: [ROSE, AMBER, MINT, BLUE, NAVY][i],
+                  tension: 0.3, pointRadius: 1, borderWidth: 1.5,
+                })),
+              }} options={common} />
+            </div>
           </div>
         </div>
-        <div className="gx-chart-card">
-          <h3>Concentration</h3>
-          <div className="gx-chart-wrap">
-            <Line data={{ labels, datasets: [{ label: 'Conc', data: conc, borderColor: BLUE, tension: 0.4, fill: true, backgroundColor: 'rgba(8,148,206,.1)', pointRadius: 2 }] }} options={{ ...common, scales: { ...common.scales, y: { ...common.scales.y, min: 0, max: 10 } } }} />
-          </div>
-        </div>
-        <div className="gx-chart-card">
-          <h3>Meditation minutes</h3>
-          <div className="gx-chart-wrap">
-            <Bar data={{ labels, datasets: [{ label: 'Min', data: med, backgroundColor: 'rgba(201,162,39,.7)' }] }} options={common} />
-          </div>
-        </div>
-        <div className="gx-chart-card">
-          <h3>Energy investment</h3>
-          <div className="gx-chart-wrap">
-            <Doughnut data={{ labels: Object.keys(energy), datasets: [{ data: Object.values(energy), backgroundColor: [BLUE, AMBER, ROSE, NAVY, MINT], borderWidth: 0 }] }} options={{ ...common, scales: undefined }} />
-          </div>
-        </div>
-        <div className="gx-chart-card span2">
-          <h3>Egoic triggers / day</h3>
-          <div className="gx-chart-wrap">
-            <Line data={{ labels, datasets: [{ label: 'Triggers', data: totalDef, borderColor: ROSE, fill: true, backgroundColor: 'rgba(232,93,76,.12)', tension: 0.4, pointRadius: 2 }] }} options={common} />
-          </div>
-        </div>
-        <div className="gx-chart-card">
-          <h3>Conduct adherence %</h3>
-          <div className="gx-chart-wrap">
-            <Bar data={{ labels: ['Divinity', 'Chastity', 'Eating'], datasets: [{ data: conduct, backgroundColor: [BLUE, AMBER, MINT] }] }} options={{ ...common, scales: { ...common.scales, y: { ...common.scales.y, min: 0, max: 100 } } }} />
-          </div>
-        </div>
-        <div className="gx-chart-card">
-          <h3>Sleep vs awareness</h3>
-          <div className="gx-chart-wrap">
-            <Scatter data={{ datasets: [{ label: 'Sleep→Aware', data: rows.map(([, r]) => ({ x: Number(r.sleep) || 0, y: Number(r.aware) || 0 })), backgroundColor: BLUE }] }} options={common} />
-          </div>
-        </div>
-        <div className="gx-chart-card">
-          <h3>Mood trend</h3>
-          <div className="gx-chart-wrap">
-            <Line data={{ labels, datasets: [{ label: 'Mood', data: mood, borderColor: MINT, tension: 0.4, fill: true, backgroundColor: 'rgba(6,201,122,.12)', pointRadius: 2 }] }} options={{ ...common, scales: { ...common.scales, y: { ...common.scales.y, min: 0, max: 10 } } }} />
-          </div>
-        </div>
-        <div className="gx-chart-card">
-          <h3>Aware vs mechanical avg</h3>
-          <div className="gx-chart-wrap">
-            <Doughnut data={{ labels: ['Aware', 'Mechanical'], datasets: [{ data: [avg(aware), avg(mech)], backgroundColor: [BLUE, ROSE], borderWidth: 0 }] }} options={{ ...common, scales: undefined }} />
-          </div>
-        </div>
-        <div className="gx-chart-card span2">
-          <h3>Individual defect trends</h3>
-          <div className="gx-chart-wrap tall">
-            <Line data={{
-              labels,
-              datasets: DEFECTS.map((d, i) => ({
-                label: d.title,
-                data: rows.map(([, r]) => Number((r as Record<string, unknown>)[`${d.id}Count`]) || 0),
-                borderColor: [ROSE, AMBER, MINT, BLUE, NAVY][i],
-                tension: 0.3, pointRadius: 1, borderWidth: 1.5,
-              })),
-            }} options={common} />
-          </div>
-        </div>
-      </div>
+      )}
 
-      <h3 style={{ fontFamily: 'Poppins', margin: '18px 0 10px' }}>Latest activity</h3>
-      {recent.length === 0 && <div className="gx-card" style={{ color: 'var(--ink-soft)' }}>No entries yet</div>}
-      {recent.map(([k, r]) => (
-        <div key={k} className="gx-card" style={{ marginBottom: 8 }}>
-          <strong>{k}</strong>
-          <p style={{ fontSize: 13, color: 'var(--ink-soft)' }}>
-            Aware {r.aware || 0}h · Focus {r.conc || 0} · {(r.virtue || r.study || r.tomorrow || r.energy || 'Logged').toString().slice(0, 80)}
-          </p>
+      {section === 'body' && (
+        <div className="gx-chart-grid">
+          <div className="gx-chart-card">
+            <h3>Energy investment</h3>
+            <div className="gx-chart-wrap">
+              <Doughnut data={{ labels: Object.keys(energy), datasets: [{ data: Object.values(energy), backgroundColor: [BLUE, AMBER, ROSE, NAVY, MINT], borderWidth: 0 }] }} options={{ ...common, scales: undefined }} />
+            </div>
+          </div>
+          <div className="gx-chart-card">
+            <h3>Conduct adherence %</h3>
+            <div className="gx-chart-wrap">
+              <Bar data={{ labels: ['Divinity', 'Chastity', 'Eating'], datasets: [{ data: conduct, backgroundColor: [BLUE, AMBER, MINT] }] }} options={{ ...common, scales: { ...common.scales, y: { ...common.scales.y, min: 0, max: 100 } } }} />
+            </div>
+          </div>
+          <div className="gx-chart-card">
+            <h3>Sleep vs awareness</h3>
+            <div className="gx-chart-wrap">
+              <Scatter data={{ datasets: [{ label: 'Sleep→Aware', data: rows.map(([, r]) => ({ x: Number(r.sleep) || 0, y: Number(r.aware) || 0 })), backgroundColor: BLUE }] }} options={common} />
+            </div>
+          </div>
+          <div className="gx-chart-card">
+            <h3>Mood trend</h3>
+            <div className="gx-chart-wrap">
+              <Line data={{ labels, datasets: [{ label: 'Mood', data: mood, borderColor: MINT, tension: 0.4, fill: true, backgroundColor: 'rgba(6,201,122,.12)', pointRadius: 2 }] }} options={{ ...common, scales: { ...common.scales, y: { ...common.scales.y, min: 0, max: 10 } } }} />
+            </div>
+          </div>
         </div>
-      ))}
+      )}
+
+      {section === 'feed' && (
+        <>
+          <h3 style={{ fontFamily: 'Poppins', margin: '0 0 10px' }}>Latest activity</h3>
+          {recent.length === 0 && <div className="gx-card" style={{ color: 'var(--ink-soft)' }}>No entries yet</div>}
+          {recent.map(([k, r]) => (
+            <div key={k} className="gx-card" style={{ marginBottom: 8 }}>
+              <strong>{k}</strong>
+              <p style={{ fontSize: 13, color: 'var(--ink-soft)' }}>
+                Aware {r.aware || 0}h · Focus {r.conc || 0} · {(r.virtue || r.study || r.tomorrow || r.energy || 'Logged').toString().slice(0, 80)}
+              </p>
+            </div>
+          ))}
+        </>
+      )}
     </Shell>
   );
 }

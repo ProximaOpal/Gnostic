@@ -1,18 +1,22 @@
 import { useState } from 'react';
 import { Shell } from '@/components/Shell';
+import { ModeToggle } from '@/components/ModeToggle';
 import { useStore } from '@/context/StoreContext';
 import {
   calcNumerology, getAge, getDailyTarot, getDayRuler, getPlanetaryHour,
-  LIFE_STAGES, NUM_MEANINGS, PLANETS, PSYCH_TYPES, TAROT,
+  LIFE_STAGES, NUM_MEANINGS, PLANETS, PSYCH_TYPES,
 } from '@/lib/cosmic';
 import { DEFECTS } from '@/lib/types';
 
 const BEHAVIOURS = ['Perfectionism','Procrastination','People-pleasing','Avoidance','Rumination','Spiritual bypassing','Self-sabotage','Comparison','Isolation','Overwork'];
 
+type Section = 'numbers' | 'tarot' | 'planets' | 'portrait';
+
 export function PsychePage() {
   const { user, patchProfile, toast } = useStore();
   const p = user?.profile || {};
   const [edit, setEdit] = useState(!p.dob);
+  const [section, setSection] = useState<Section>('numbers');
   const name = p.fullName || user?.name || '';
   const num = calcNumerology(p.dob, name);
   const age = getAge(p.dob);
@@ -86,76 +90,104 @@ export function PsychePage() {
         </div>
       )}
 
-      <h3 style={{ fontFamily: 'Poppins', marginBottom: 10 }}>Chaldean</h3>
-      <div className="gx-stats">
-        {([
-          ['Life Path', num.lifePath],
-          ['Destiny', num.destiny],
-          ['Soul Urge', num.soul],
-          ['Personal Year', num.personalYear],
-          ['Personal Month', num.personalMonth],
-          ['Personal Day', num.personalDay],
-        ] as const).map(([lbl, v]) => (
-          <div key={lbl} className="gx-stat">
-            <b>{v ?? '—'}</b>
-            <small>{lbl}</small>
-            {v && NUM_MEANINGS[v] ? <div style={{ fontSize: 11, color: 'var(--ink-soft)', marginTop: 4 }}>{NUM_MEANINGS[v].name}</div> : null}
-          </div>
-        ))}
-      </div>
-      {age != null && stage && (
-        <div className="gx-card" style={{ marginBottom: 14 }}>
-          <strong>{age} years · {stage.name}</strong>
-          <p style={{ fontSize: 13, color: 'var(--ink-soft)' }}>{stage.desc}</p>
-        </div>
-      )}
+      <ModeToggle
+        value={section}
+        onChange={(id) => setSection(id as Section)}
+        options={[
+          { id: 'numbers', label: 'Numbers' },
+          { id: 'tarot', label: 'Tarot' },
+          { id: 'planets', label: 'Planets' },
+          { id: 'portrait', label: 'Portrait' },
+        ]}
+      />
 
-      <h3 style={{ fontFamily: 'Poppins', margin: '16px 0 10px' }}>Daily tarot</h3>
-      <div className="gx-card-grid">
-        {[tarot.primary, tarot.secondary].map((c, i) => (
-          <div key={c.n + i} className="gx-card" style={{ textAlign: 'center' }}>
-            <div className="gx-pill" style={{ marginBottom: 8 }}>{i === 0 ? 'Primary' : 'Secondary'}</div>
-            <div style={{ fontSize: 40 }}>{c.emoji}</div>
-            <strong style={{ fontFamily: 'Poppins' }}>{c.name}</strong>
-            <p style={{ fontSize: 12, color: 'var(--ink-soft)' }}>Arcanum {c.n} · {c.key} · {c.planet}</p>
-            <p style={{ fontSize: 13, marginTop: 8 }}>{c.interp}</p>
-          </div>
-        ))}
-      </div>
-
-      <h3 style={{ fontFamily: 'Poppins', margin: '16px 0 10px' }}>Planets</h3>
-      <div className="gx-card-grid">
-        {PLANETS.map((pl) => (
-          <div key={pl.name} className="gx-card" style={{ textAlign: 'center', boxShadow: pl.name === ruler.name ? 'inset 0 0 0 1.5px var(--mint-deep)' : undefined }}>
-            <div style={{ fontSize: 28 }}>{pl.emoji}</div>
-            <strong>{pl.name}</strong>
-            <div style={{ fontSize: 12, color: 'var(--ink-soft)' }}>{pl.day}</div>
-          </div>
-        ))}
-      </div>
-      <div className="gx-card" style={{ marginTop: 10 }}>
-        <strong>{hour.emoji} {hour.name} hour now</strong>
-        <p style={{ fontSize: 13, color: 'var(--ink-soft)' }}>{hour.quality}</p>
-      </div>
-
-      {(p.type || p.chiefDefect || p.belief) && (
+      {section === 'numbers' && (
         <>
-          <h3 style={{ fontFamily: 'Poppins', margin: '16px 0 10px' }}>Self-portrait</h3>
-          {p.type && <div className="gx-card" style={{ marginBottom: 8 }}><strong>{p.type} centre</strong><p style={{ fontSize: 13, color: 'var(--ink-soft)' }}>{PSYCH_TYPES[p.type]}</p></div>}
-          {p.chiefDefect && <div className="gx-card" style={{ marginBottom: 8 }}><strong>Chief ego</strong><p style={{ fontSize: 13 }}>{p.chiefDefect}</p></div>}
-          {p.belief && <div className="gx-card" style={{ marginBottom: 8 }}><strong>Limiting belief</strong><p style={{ fontSize: 13 }}>“{p.belief}”</p></div>}
+          <h3 style={{ fontFamily: 'Poppins', marginBottom: 10 }}>Chaldean</h3>
+          <div className="gx-stats">
+            {([
+              ['Life Path', num.lifePath],
+              ['Destiny', num.destiny],
+              ['Soul Urge', num.soul],
+              ['Personal Year', num.personalYear],
+              ['Personal Month', num.personalMonth],
+              ['Personal Day', num.personalDay],
+            ] as const).map(([lbl, v]) => (
+              <div key={lbl} className="gx-stat">
+                <b>{v ?? '—'}</b>
+                <small>{lbl}</small>
+                {v && NUM_MEANINGS[v] ? <div style={{ fontSize: 11, color: 'var(--ink-soft)', marginTop: 4 }}>{NUM_MEANINGS[v].name}</div> : null}
+              </div>
+            ))}
+          </div>
+          {age != null && stage && (
+            <div className="gx-card" style={{ marginBottom: 14 }}>
+              <strong>{age} years · {stage.name}</strong>
+              <p style={{ fontSize: 13, color: 'var(--ink-soft)' }}>{stage.desc}</p>
+            </div>
+          )}
         </>
       )}
 
-      {entries.length >= 5 && (
+      {section === 'tarot' && (
         <>
-          <h3 style={{ fontFamily: 'Poppins', margin: '16px 0 10px' }}>Ledger patterns</h3>
-          <div className="gx-card">
-            {DEFECTS.map((d) => {
-              const count = entries.reduce((s, r) => s + (Number((r as Record<string, unknown>)[`${d.id}Count`]) || 0), 0);
-              return <div key={d.id} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}><span>{d.title}</span><b>{count}</b></div>;
-            })}
+          <h3 style={{ fontFamily: 'Poppins', marginBottom: 10 }}>Daily tarot</h3>
+          <div className="gx-card-grid">
+            {[tarot.primary, tarot.secondary].map((c, i) => (
+              <div key={c.n + i} className="gx-card" style={{ textAlign: 'center' }}>
+                <div className="gx-pill" style={{ marginBottom: 8 }}>{i === 0 ? 'Primary' : 'Secondary'}</div>
+                <div style={{ fontSize: 40 }}>{c.emoji}</div>
+                <strong style={{ fontFamily: 'Poppins' }}>{c.name}</strong>
+                <p style={{ fontSize: 12, color: 'var(--ink-soft)' }}>Arcanum {c.n} · {c.key} · {c.planet}</p>
+                <p style={{ fontSize: 13, marginTop: 8 }}>{c.interp}</p>
+              </div>
+            ))}
           </div>
+        </>
+      )}
+
+      {section === 'planets' && (
+        <>
+          <h3 style={{ fontFamily: 'Poppins', marginBottom: 10 }}>Planets</h3>
+          <div className="gx-card-grid">
+            {PLANETS.map((pl) => (
+              <div key={pl.name} className="gx-card" style={{ textAlign: 'center', boxShadow: pl.name === ruler.name ? 'inset 0 0 0 1.5px var(--mint-deep)' : undefined }}>
+                <div style={{ fontSize: 28 }}>{pl.emoji}</div>
+                <strong>{pl.name}</strong>
+                <div style={{ fontSize: 12, color: 'var(--ink-soft)' }}>{pl.day}</div>
+              </div>
+            ))}
+          </div>
+          <div className="gx-card" style={{ marginTop: 10 }}>
+            <strong>{hour.emoji} {hour.name} hour now</strong>
+            <p style={{ fontSize: 13, color: 'var(--ink-soft)' }}>{hour.quality}</p>
+          </div>
+        </>
+      )}
+
+      {section === 'portrait' && (
+        <>
+          <h3 style={{ fontFamily: 'Poppins', marginBottom: 10 }}>Self-portrait</h3>
+          {!(p.type || p.chiefDefect || p.belief) && (
+            <div className="gx-card" style={{ color: 'var(--ink-soft)', marginBottom: 10 }}>
+              Add a centre, chief defect, or belief via Edit profile.
+            </div>
+          )}
+          {p.type && <div className="gx-card" style={{ marginBottom: 8 }}><strong>{p.type} centre</strong><p style={{ fontSize: 13, color: 'var(--ink-soft)' }}>{PSYCH_TYPES[p.type]}</p></div>}
+          {p.chiefDefect && <div className="gx-card" style={{ marginBottom: 8 }}><strong>Chief ego</strong><p style={{ fontSize: 13 }}>{p.chiefDefect}</p></div>}
+          {p.belief && <div className="gx-card" style={{ marginBottom: 8 }}><strong>Limiting belief</strong><p style={{ fontSize: 13 }}>“{p.belief}”</p></div>}
+
+          {entries.length >= 5 && (
+            <>
+              <h3 style={{ fontFamily: 'Poppins', margin: '16px 0 10px' }}>Ledger patterns</h3>
+              <div className="gx-card">
+                {DEFECTS.map((d) => {
+                  const count = entries.reduce((s, r) => s + (Number((r as Record<string, unknown>)[`${d.id}Count`]) || 0), 0);
+                  return <div key={d.id} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}><span>{d.title}</span><b>{count}</b></div>;
+                })}
+              </div>
+            </>
+          )}
         </>
       )}
     </Shell>

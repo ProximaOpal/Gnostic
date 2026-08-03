@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Shell } from '@/components/Shell';
+import { ModeToggle } from '@/components/ModeToggle';
 import { useStore } from '@/context/StoreContext';
 import { dateKey } from '@/lib/store';
 import { DEFECTS, IMAGES, type DiaryEntry, type EnergyFocus } from '@/lib/types';
@@ -76,11 +77,11 @@ export function DiaryPage() {
         ))}
       </div>
 
-      <div className="gx-tabs">
-        {phases.map((p) => (
-          <button key={p.id} className={`gx-tab ${phase === p.id ? 'on' : ''}`} onClick={() => setPhase(p.id)}>{p.title}</button>
-        ))}
-      </div>
+      <ModeToggle
+        value={phase}
+        onChange={(id) => setPhase(id as Phase)}
+        options={phases.map((p) => ({ id: p.id, label: p.title }))}
+      />
 
       {phase === 'morning' && (
         <div className="gx-card">
