@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useLocation } from 'wouter';
 import { Shell } from '@/components/Shell';
+import { ModeToggle } from '@/components/ModeToggle';
 import { useStore } from '@/context/StoreContext';
 import { IMAGES } from '@/lib/types';
 
@@ -11,11 +12,14 @@ const GUIDES = [
   { id: 'summary', title: 'Summary', img: IMAGES.sum, q: 'aware mechanical energy tomorrow' },
 ];
 
+type ResultTab = 'guides' | 'ledger';
+
 export function SearchPage() {
   const { user } = useStore();
   const [, setLoc] = useLocation();
   const params = new URLSearchParams(window.location.search);
   const [q, setQ] = useState(params.get('q') || '');
+  const [tab, setTab] = useState<ResultTab>('guides');
 
   const results = useMemo(() => {
     const s = q.trim().toLowerCase();
@@ -37,53 +41,78 @@ export function SearchPage() {
     return { guides, entries, notes, psyche };
   }, [q, user]);
 
+  const entrySlice = results.entries.slice(0, 4);
+  const noteSlice = results.notes.slice(0, 3);
+
   return (
     <Shell onSearch={setQ}>
-      <h2>Glorian Search</h2>
-      <p className="sub">Search guidance, diary entries, notes, and psyche profile.</p>
-      <div className="gx-search" style={{ maxWidth: '100%', marginBottom: 16 }}>
-        <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Ask anything about your practice…" />
-      </div>
-
-      {!q && (
-        <div className="gx-card" style={{ marginBottom: 16 }}>
-          <img src={IMAGES.notes} alt="" style={{ borderRadius: 12, aspectRatio: '16/9', objectFit: 'cover', width: '100%', marginBottom: 12 }} />
-          <strong>Spiritual Diary</strong>
-          <p style={{ fontSize: 13, color: 'var(--ink-soft)', marginTop: 6 }}>
-            A Daily Record of Observed Facts · Glorian · 24 Dec 2017. Follow Sivananda’s example — observe yourself objectively each day.
-          </p>
+      <div className="gx-page">
+        <h2>Glorian Search</h2>
+        <p className="sub">Search guidance, diary, notes, and psyche.</p>
+        <div className="gx-search" style={{ maxWidth: '100%', marginBottom: 10, flexShrink: 0 }}>
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Ask anything about your practice…" />
         </div>
-      )}
 
-      <div className="gx-card-grid" style={{ marginBottom: 16 }}>
-        {results.guides.map((g) => (
-          <button key={g.id} className="gx-photo-card" onClick={() => setLoc('/diary')}>
-            <div className="ph" style={{ backgroundImage: `url(${g.img})` }} />
-            <div className="body"><strong>{g.title}</strong><span>Open diary phase</span></div>
-          </button>
-        ))}
+        <ModeToggle
+          value={tab}
+          onChange={(id) => setTab(id as ResultTab)}
+          options={[
+            { id: 'guides', label: 'Guides' },
+            { id: 'ledger', label: 'Ledger' },
+          ]}
+        />
+
+        <div className="gx-fill">
+          {tab === 'guides' && (
+            <>
+              {!q && (
+                <div className="gx-card" style={{ marginBottom: 10, flexShrink: 0, padding: 12 }}>
+                  <strong style={{ fontSize: 14 }}>Spiritual Diary</strong>
+                  <p style={{ fontSize: 12, color: 'var(--ink-soft)', marginTop: 4 }}>
+                    A Daily Record of Observed Facts · Glorian · Follow Sivananda — observe yourself each day.
+                  </p>
+                </div>
+              )}
+              <div className="gx-card-grid" style={{ alignContent: 'start' }}>
+                {results.guides.map((g) => (
+                  <button key={g.id} type="button" className="gx-photo-card" onClick={() => setLoc('/diary')}>
+                    <div className="ph" style={{ backgroundImage: `url(${g.img})` }} />
+                    <div className="body"><strong>{g.title}</strong><span>Open diary phase</span></div>
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
+
+          {tab === 'ledger' && (
+            <div className="gx-feed">
+              {results.psyche && (
+                <button type="button" className="gx-card" style={{ width: '100%', textAlign: 'left' }} onClick={() => setLoc('/psyche')}>
+                  <strong style={{ fontSize: 13 }}>Psyche intelligence</strong>
+                  <p style={{ fontSize: 12, color: 'var(--ink-soft)' }}>Numerology, planets, tarot, self-portrait</p>
+                </button>
+              )}
+              {noteSlice.map((n) => (
+                <button key={n.id} type="button" className="gx-card" style={{ width: '100%', textAlign: 'left' }} onClick={() => setLoc('/notes')}>
+                  <strong style={{ fontSize: 13 }}>{n.title}</strong>
+                  <p style={{ fontSize: 12, color: 'var(--ink-soft)' }}>{n.snip}</p>
+                </button>
+              ))}
+              {entrySlice.map((e) => (
+                <button key={e.date} type="button" className="gx-card" style={{ width: '100%', textAlign: 'left' }} onClick={() => setLoc('/diary')}>
+                  <strong style={{ fontSize: 13 }}>{e.date}</strong>
+                  <p style={{ fontSize: 12, color: 'var(--ink-soft)' }}>{e.snip}</p>
+                </button>
+              ))}
+              {!results.psyche && noteSlice.length === 0 && entrySlice.length === 0 && (
+                <div className="gx-card" style={{ color: 'var(--ink-soft)', fontSize: 13 }}>
+                  {q ? 'No ledger matches.' : 'Type a query to search your diary and notes.'}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
-
-      {results.psyche && (
-        <button className="gx-card" style={{ width: '100%', textAlign: 'left', marginBottom: 10 }} onClick={() => setLoc('/psyche')}>
-          <strong>Psyche intelligence</strong>
-          <p style={{ fontSize: 13, color: 'var(--ink-soft)' }}>Numerology, planets, tarot, self-portrait</p>
-        </button>
-      )}
-
-      {results.notes.map((n) => (
-        <button key={n.id} className="gx-card" style={{ width: '100%', textAlign: 'left', marginBottom: 8 }} onClick={() => setLoc('/notes')}>
-          <strong>{n.title}</strong>
-          <p style={{ fontSize: 13, color: 'var(--ink-soft)' }}>{n.snip}</p>
-        </button>
-      ))}
-
-      {results.entries.map((e) => (
-        <button key={e.date} className="gx-card" style={{ width: '100%', textAlign: 'left', marginBottom: 8 }} onClick={() => setLoc('/diary')}>
-          <strong>{e.date}</strong>
-          <p style={{ fontSize: 13, color: 'var(--ink-soft)' }}>{e.snip}</p>
-        </button>
-      ))}
     </Shell>
   );
 }

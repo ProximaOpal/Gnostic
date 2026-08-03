@@ -78,15 +78,13 @@ export function Shell({ children, onSearch }: { children: ReactNode; onSearch?: 
         <PanelNav />
         <div className="gx-progress"><i style={{ ['--p' as string]: `${progress}%` } as CSSProperties} /></div>
         <div className="gx-chips">
-          {meta.chips.map((c) => <span key={c} className="gx-chip">{c}</span>)}
+          {meta.chips.slice(0, 3).map((c) => <span key={c} className="gx-chip">{c}</span>)}
           <span className="gx-chip">{tarot.primary.emoji} {tarot.primary.name}</span>
-          <span className="gx-chip">{ruler.emoji} {ruler.name}</span>
-          {num.personalDay ? <span className="gx-chip">PD {num.personalDay}</span> : null}
         </div>
         <h1>{meta.headline}</h1>
         <p className="byline">{meta.sub}</p>
         <div className="gx-left-foot">
-          {user ? `${user.name} · ${days} days logged` : 'Spiritual diary protocol'}
+          {user ? `${user.name} · ${days}d · ${ruler.emoji} ${ruler.name}${num.personalDay ? ` · PD ${num.personalDay}` : ''}` : 'Spiritual diary protocol'}
         </div>
       </aside>
 
@@ -113,7 +111,7 @@ export function Shell({ children, onSearch }: { children: ReactNode; onSearch?: 
           </div>
         </div>
         <div className="gx-section-label">{meta.title}</div>
-        {children}
+        <div className="gx-content">{children}</div>
       </main>
       <MobileNav />
     </div>
