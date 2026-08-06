@@ -4,6 +4,7 @@ dist
 *.local
 .env
 .env.*
+!.env.example
 
 # Personal financial statement
 public/mpesa-statement.pdf
