@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
-import type { AppState, DiaryEntry, Note, Profile, User } from '@/lib/types';
+import type { AppState, DiaryEntry, Note, PhotoItem, Profile, User } from '@/lib/types';
 import type { MoneyState } from '@/lib/money/types';
 import { ensureUser, getActiveUser, loadState, saveState, uid, hash, fileToData, loadTheme, saveTheme, emptyMoney } from '@/lib/store';
 
@@ -14,6 +14,7 @@ type Ctx = {
   patchProfile: (p: Partial<Profile>) => void;
   patchEntry: (date: string, patch: Partial<DiaryEntry>) => void;
   setNotes: (notes: Note[]) => void;
+  setPhotos: (photos: PhotoItem[] | ((prev: PhotoItem[]) => PhotoItem[])) => void;
   setMoney: (money: MoneyState | ((prev: MoneyState) => MoneyState)) => void;
   setProgressNotes: (text: string) => void;
   setTheme: (theme: 'light' | 'dark') => void;
@@ -78,7 +79,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     if (avatarFile) avatar = await fileToData(avatarFile);
     s.users[id] = {
       id, name: name.trim(), pass: hash(pass), avatar,
-      ledger: {}, notes: [], profile: { fullName: name.trim() },
+      ledger: {}, notes: [], photos: [], profile: { fullName: name.trim() },
       money: emptyMoney(), theme: 'light', progressNotes: '',
       createdAt: Date.now(),
     };
@@ -112,6 +113,15 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     persist(s);
   }, [persist]);
 
+  const setPhotos = useCallback((photos: PhotoItem[] | ((prev: PhotoItem[]) => PhotoItem[])) => {
+    const s = loadState();
+    const u = getActiveUser(s);
+    if (!u) return;
+    const prev = Array.isArray(u.photos) ? u.photos : [];
+    u.photos = typeof photos === 'function' ? photos(prev) : photos;
+    persist(s);
+  }, [persist]);
+
   const setMoney = useCallback((money: MoneyState | ((prev: MoneyState) => MoneyState)) => {
     const s = loadState();
     const u = getActiveUser(s);
@@ -136,8 +146,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo(() => ({
     state, user, theme, refresh, login, logout, signup, patchProfile, patchEntry, setNotes,
-    setMoney, setProgressNotes, setTheme, toast, toastMsg,
-  }), [state, user, theme, refresh, login, logout, signup, patchProfile, patchEntry, setNotes, setMoney, setProgressNotes, setTheme, toast, toastMsg]);
+    setPhotos, setMoney, setProgressNotes, setTheme, toast, toastMsg,
+  }), [state, user, theme, refresh, login, logout, signup, patchProfile, patchEntry, setNotes, setPhotos, setMoney, setProgressNotes, setTheme, toast, toastMsg]);
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;
 }

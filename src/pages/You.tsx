@@ -14,6 +14,7 @@ export function YouPage() {
       ledger: user.ledger,
       notes: user.notes,
       money: user.money,
+      photos: user.photos,
       progressNotes: user.progressNotes,
       numerology: calcNumerology(user.profile.dob, user.profile.fullName || user.name),
       exported: new Date().toISOString(),

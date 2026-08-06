@@ -15,7 +15,7 @@ export type MoneyPlace = {
   name: string;
   lat: number;
   lng: number;
-  source: 'pin' | 'location' | 'nominatim' | 'manual';
+  source: 'pin' | 'location' | 'nominatim' | 'photon' | 'biased' | 'manual';
 };
 
 export type MoneyTx = {

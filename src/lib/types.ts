@@ -33,6 +33,17 @@ export type Note = {
   createdAt: number; updatedAt: number;
 };
 
+export type PhotoItem = {
+  id: string;
+  name: string;
+  dataUrl: string;
+  mime: string;
+  uploadedAt: number;
+  status: 'idle' | 'uploading' | 'done' | 'error';
+  analysis?: unknown;
+  error?: string;
+};
+
 export type Profile = {
   fullName?: string; dob?: string; tob?: string; pob?: string; location?: string;
   type?: string; patternText?: string; selectedDefects?: string[];
@@ -52,6 +63,7 @@ export type User = {
   id: string; name: string; pass: string; avatar: string;
   ledger: Record<string, DiaryEntry>; notes: Note[]; profile: Profile;
   money?: MoneyState;
+  photos?: PhotoItem[];
   theme?: 'light' | 'dark';
   progressNotes?: string;
   createdAt: number;

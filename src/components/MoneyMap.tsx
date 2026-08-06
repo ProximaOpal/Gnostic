@@ -1,18 +1,19 @@
 import { useEffect, useMemo } from 'react';
-import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaflet';
+import { LayerGroup, LayersControl, MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaflet';
 import type { MoneyPlace, MoneyTx } from '@/lib/money/types';
 import 'leaflet/dist/leaflet.css';
 
 function FitBounds({ places }: { places: MoneyPlace[] }) {
   const map = useMap();
   useEffect(() => {
+    const t = window.setTimeout(() => map.invalidateSize(), 80);
     if (!places.length) {
       map.setView([-1.2864, 36.8172], 11);
-      return;
+      return () => clearTimeout(t);
     }
     if (places.length === 1) {
-      map.setView([places[0].lat, places[0].lng], 13);
-      return;
+      map.setView([places[0].lat, places[0].lng], 14);
+      return () => clearTimeout(t);
     }
     const lats = places.map((p) => p.lat);
     const lngs = places.map((p) => p.lng);
@@ -21,19 +22,35 @@ function FitBounds({ places }: { places: MoneyPlace[] }) {
         [Math.min(...lats), Math.min(...lngs)],
         [Math.max(...lats), Math.max(...lngs)],
       ],
-      { padding: [28, 28] },
+      { padding: [36, 36] },
     );
+    return () => clearTimeout(t);
   }, [places, map]);
+
+  useEffect(() => {
+    const onResize = () => map.invalidateSize();
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, [map]);
+
   return null;
 }
 
-export function MoneyMap({ txs, height = 220 }: { txs: MoneyTx[]; height?: number }) {
+export function MoneyMap({
+  txs,
+  height = 220,
+  fill = false,
+}: {
+  txs: MoneyTx[];
+  height?: number | string;
+  fill?: boolean;
+}) {
   const places = useMemo(() => {
-    const map = new Map<string, { place: MoneyPlace; count: number; spend: number }>();
+    const map = new Map<string, { place: MoneyPlace; count: number; spend: number; sample?: MoneyTx }>();
     txs.forEach((t) => {
       if (!t.place) return;
       const k = `${t.place.lat.toFixed(4)},${t.place.lng.toFixed(4)}`;
-      const row = map.get(k) || { place: t.place, count: 0, spend: 0 };
+      const row = map.get(k) || { place: t.place, count: 0, spend: 0, sample: t };
       row.count++;
       row.spend += t.withdrawn;
       map.set(k, row);
@@ -41,13 +58,42 @@ export function MoneyMap({ txs, height = 220 }: { txs: MoneyTx[]; height?: numbe
     return [...map.values()];
   }, [txs]);
 
+  const style = fill
+    ? { height: '100%', width: '100%', minHeight: 280, borderRadius: 12 }
+    : { height: typeof height === 'number' ? height : height, width: '100%', borderRadius: 12 };
+
   return (
-    <div className="money-map" style={{ height }}>
-      <MapContainer center={[-1.2864, 36.8172]} zoom={11} style={{ height: '100%', width: '100%', borderRadius: 12 }} scrollWheelZoom={false}>
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
+    <div className={`money-map${fill ? ' is-fill' : ''}`} style={fill ? { height: '100%', minHeight: 320 } : { height }}>
+      <MapContainer center={[-1.2864, 36.8172]} zoom={11} style={style} scrollWheelZoom>
+        <LayersControl position="topright">
+          <LayersControl.BaseLayer checked name="Street">
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+          </LayersControl.BaseLayer>
+          <LayersControl.BaseLayer name="Satellite">
+            <TileLayer
+              attribution="Tiles &copy; Esri — Source: Esri, Maxar, Earthstar Geographics"
+              url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+              maxZoom={19}
+            />
+          </LayersControl.BaseLayer>
+          <LayersControl.BaseLayer name="Satellite + labels">
+            <LayerGroup>
+              <TileLayer
+                attribution="Esri World Imagery"
+                url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+                maxZoom={19}
+              />
+              <TileLayer
+                attribution="Esri Labels"
+                url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}"
+                opacity={0.95}
+              />
+            </LayerGroup>
+          </LayersControl.BaseLayer>
+        </LayersControl>
         <FitBounds places={places.map((p) => p.place)} />
         {places.map((p) => (
           <CircleMarker
@@ -61,7 +107,7 @@ export function MoneyMap({ txs, height = 220 }: { txs: MoneyTx[]; height?: numbe
               <br />
               {p.count} pins · KES {Math.round(p.spend).toLocaleString()}
               <br />
-              <small>{p.place.source}</small>
+              <small>{p.place.source}{p.sample ? ` · ${p.sample.time.slice(0, 16).replace('T', ' ')}` : ''}</small>
             </Popup>
           </CircleMarker>
         ))}

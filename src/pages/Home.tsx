@@ -9,6 +9,7 @@ const CARDS = [
   { href: '/notes', title: 'Notes', sub: 'Freeform observations', img: IMAGES.notes },
   { href: '/psyche', title: 'Psyche', sub: 'Numbers · planets · tarot', img: IMAGES.cosmos },
   { href: '/money', title: 'Money', sub: 'M-PESA · map · spend', img: IMAGES.money },
+  { href: '/photos', title: 'Photos', sub: 'n8n vision webhook', img: IMAGES.notes },
   { href: '/search', title: 'Search', sub: 'Glorian + ledger', img: IMAGES.sum },
   { href: '/trends', title: 'Trends', sub: 'Analytics & charts', img: IMAGES.day },
   { href: '/you', title: 'You', sub: 'Profile & export', img: IMAGES.night },

@@ -59,6 +59,7 @@ export function ensureUser(u: User): User {
   if (!u.profile) u.profile = {};
   if (!u.ledger) u.ledger = {};
   if (!Array.isArray(u.notes)) u.notes = [];
+  if (!Array.isArray(u.photos)) u.photos = [];
   if (!u.money) u.money = emptyMoney();
   if (!u.money.txs) u.money.txs = [];
   if (!u.money.chartRange) u.money.chartRange = 'week';

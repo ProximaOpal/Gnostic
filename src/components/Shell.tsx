@@ -1,10 +1,12 @@
-import type { CSSProperties, ReactNode } from 'react';
-import { Search, Moon, Sun } from 'lucide-react';
+import { useEffect, useState, type CSSProperties, type ReactNode } from 'react';
+import { Search, Moon, Sun, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { useLocation } from 'wouter';
 import { PanelNav, MobileNav } from './PanelNav';
 import { useStore } from '@/context/StoreContext';
 import { IMAGES } from '@/lib/types';
 import { getDailyTarot, getDayRuler, calcNumerology } from '@/lib/cosmic';
+
+const PANEL_KEY = 'gnostic_panel_collapsed';
 
 const META: Record<string, { title: string; sub: string; photo: string; headline: ReactNode; chips: string[] }> = {
   '/': {
@@ -42,6 +44,13 @@ const META: Record<string, { title: string; sub: string; photo: string; headline
     headline: <>See the <em>cash</em> pulse</>,
     chips: ['#MPESA', '#MAP', '#SPEND'],
   },
+  '/photos': {
+    title: 'Photos',
+    sub: 'Upload · n8n analysis webhook',
+    photo: IMAGES.notes,
+    headline: <>Capture what <em>appears</em></>,
+    chips: ['#PHOTOS', '#N8N', '#VISION'],
+  },
   '/search': {
     title: 'Search',
     sub: 'Glorian guidance + your ledger',
@@ -65,6 +74,14 @@ const META: Record<string, { title: string; sub: string; photo: string; headline
   },
 };
 
+function loadCollapsed() {
+  try {
+    return localStorage.getItem(PANEL_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
 export function Shell({
   children,
   onSearch,
@@ -82,6 +99,7 @@ export function Shell({
 }) {
   const [loc, setLoc] = useLocation();
   const { user, theme, setTheme } = useStore();
+  const [collapsed, setCollapsed] = useState(loadCollapsed);
   const key = Object.keys(META).find((k) => (k === '/' ? loc === '/' : loc.startsWith(k))) || '/';
   const meta = META[key];
   const num = calcNumerology(user?.profile.dob, user?.profile.fullName || user?.name);
@@ -90,12 +108,29 @@ export function Shell({
   const days = Object.keys(user?.ledger || {}).length;
   const progress = Math.min(100, days * 5 + (user?.profile.dob ? 20 : 0) + Math.min(20, Math.floor((user?.money?.txs?.length || 0) / 20)));
 
+  useEffect(() => {
+    try {
+      localStorage.setItem(PANEL_KEY, collapsed ? '1' : '0');
+    } catch { /* ignore */ }
+    // Let Leaflet / charts reflow
+    window.dispatchEvent(new Event('resize'));
+  }, [collapsed]);
+
+  function togglePanel() {
+    setCollapsed((c) => !c);
+  }
+
   return (
-    <div className="gx-shell">
-      <aside className="gx-left">
+    <div className={`gx-shell${collapsed ? ' is-collapsed' : ''}`}>
+      <aside className="gx-left" aria-hidden={collapsed}>
         <div className="gx-left-bg" />
         <div className="gx-left-photo" style={{ backgroundImage: `url(${meta.photo})` }} />
-        <div className="gx-brand">Gnostic<span>.</span></div>
+        <div className="gx-left-top">
+          <div className="gx-brand">Gnostic<span>.</span></div>
+          <button type="button" className="gx-panel-toggle on-left" onClick={togglePanel} title="Collapse panel">
+            <PanelLeftClose size={16} />
+          </button>
+        </div>
         <PanelNav />
         <div className="gx-progress"><i style={{ ['--p' as string]: `${progress}%` } as CSSProperties} /></div>
         <div className="gx-chips">
@@ -112,25 +147,32 @@ export function Shell({
 
       <main className="gx-right">
         <div className="gx-right-head">
-          {!hideGlobalSearch ? (
-            <div className="gx-search">
-              <Search size={16} color="rgba(23,24,28,.38)" />
-              <input
-                placeholder={searchPlaceholder || 'Search diary, notes, Glorian…'}
-                defaultValue={searchValue}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    const q = (e.target as HTMLInputElement).value;
-                    if (onSearch) onSearch(q);
-                    else setLoc(`/search?q=${encodeURIComponent(q)}`);
-                  }
-                }}
-                onChange={(e) => {
-                  if (onSearch && key === '/notes') onSearch(e.target.value);
-                }}
-              />
-            </div>
-          ) : <div />}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: 1, minWidth: 0 }}>
+            {collapsed && (
+              <button type="button" className="gx-panel-toggle" onClick={togglePanel} title="Expand panel">
+                <PanelLeftOpen size={16} />
+              </button>
+            )}
+            {!hideGlobalSearch ? (
+              <div className="gx-search">
+                <Search size={16} color="rgba(23,24,28,.38)" />
+                <input
+                  placeholder={searchPlaceholder || 'Search diary, notes, Glorian…'}
+                  defaultValue={searchValue}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      const q = (e.target as HTMLInputElement).value;
+                      if (onSearch) onSearch(q);
+                      else setLoc(`/search?q=${encodeURIComponent(q)}`);
+                    }
+                  }}
+                  onChange={(e) => {
+                    if (onSearch && key === '/notes') onSearch(e.target.value);
+                  }}
+                />
+              </div>
+            ) : <div />}
+          </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <button
               type="button"
@@ -147,7 +189,7 @@ export function Shell({
           </div>
         </div>
         <div className="gx-section-label">{meta.title}</div>
-        <div className={`gx-content${key === '/diary' || key === '/money' ? ' scrollable' : ''}`}>{children}</div>
+        <div className={`gx-content${key === '/diary' || key === '/money' || key === '/photos' ? ' scrollable' : ''}`}>{children}</div>
       </main>
       <MobileNav />
     </div>

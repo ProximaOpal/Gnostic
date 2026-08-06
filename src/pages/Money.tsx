@@ -107,6 +107,32 @@ export function MoneyPage() {
     }
   }, [money, setMoney, toast]);
 
+  const regeocode = useCallback(async () => {
+    if (!txs.length) {
+      toast('Import a statement first');
+      return;
+    }
+    setBusy(true);
+    setGeoProgress('Business search + time check…');
+    try {
+      const cleared = txs.map((t) => {
+        const { place: _p, ...rest } = t;
+        return rest as MoneyTx;
+      });
+      const enriched = await enrichPlaces(cleared, (done, total) => {
+        setGeoProgress(`Geocoding ${done}/${total}…`);
+      });
+      setMoney((prev) => ({ ...prev, txs: enriched, geoDone: true }));
+      toast('Places refreshed with time checks');
+    } catch (e) {
+      console.error(e);
+      toast('Geocoding failed');
+    } finally {
+      setBusy(false);
+      setGeoProgress('');
+    }
+  }, [txs, setMoney, toast]);
+
   useEffect(() => {
     if (autoImport.current || (money?.txs?.length || 0) > 0) return;
     autoImport.current = true;
@@ -321,9 +347,14 @@ export function MoneyPage() {
         <section className="money-map-block">
           <div className="money-section-head">
             <h3>Places</h3>
-            <span>{txs.filter((t) => t.place).length} geocoded · Kenya overlays</span>
+            <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+              <span>{txs.filter((t) => t.place).length} geocoded · Photon + Nominatim · time-checked</span>
+              <button type="button" className="gx-btn gx-btn-ghost" style={{ padding: '4px 10px', fontSize: 11 }} disabled={busy} onClick={regeocode}>
+                Re-pin places
+              </button>
+            </div>
           </div>
-          <MoneyMap txs={txs} height={200} />
+          <MoneyMap txs={txs} fill height={280} />
         </section>
 
         <section className="money-psych">
