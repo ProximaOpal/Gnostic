@@ -87,35 +87,37 @@ export function TrendsPage() {
 
   const recent = [...rows].reverse().slice(0, 5);
 
+  const leftExtra = (
+    <div className="gx-left-extra">
+      <div className="gx-left-ranges">
+        {[
+          { id: 7, label: '7d' },
+          { id: 30, label: '30d' },
+          { id: 90, label: '90d' },
+          { id: 365, label: 'Year' },
+          { id: 0, label: 'All' },
+        ].map((r) => (
+          <button key={r.id} type="button" className={range === r.id ? 'on' : ''} onClick={() => setRange(r.id)}>
+            {r.label}
+          </button>
+        ))}
+      </div>
+      <div className="money-left-stats trends-left-stats">
+        <div><b>{rows.length}</b><span>Days</span></div>
+        <div><b>{avg(aware).toFixed(1)}h</b><span>Aware</span></div>
+        <div><b>{avg(conc).toFixed(1)}</b><span>Focus</span></div>
+        <div><b>{Math.round(avg(med))}m</b><span>Med</span></div>
+        <div><b>{defectTotals.reduce((a, b) => a + b, 0)}</b><span>Defects</span></div>
+        <div><b>{streak}</b><span>Streak</span></div>
+        <div><b>{avg(mood).toFixed(1)}</b><span>Mood</span></div>
+        <div><b>{avg(sleep).toFixed(1)}h</b><span>Sleep</span></div>
+      </div>
+    </div>
+  );
+
   return (
-    <Shell>
+    <Shell leftExtra={leftExtra}>
       <div className="gx-page">
-        <h2>Statistical analysis</h2>
-        <p className="sub">Sadhana pulse — awareness, defects, conduct, sleep.</p>
-
-        <ModeToggle
-          value={String(range)}
-          onChange={(id) => setRange(Number(id))}
-          options={[
-            { id: '7', label: '7d' },
-            { id: '30', label: '30d' },
-            { id: '90', label: '90d' },
-            { id: '365', label: 'Year' },
-            { id: '0', label: 'All' },
-          ]}
-        />
-
-        <div className="gx-stats">
-          <div className="gx-stat"><b>{rows.length}</b><small>Days</small></div>
-          <div className="gx-stat"><b>{avg(aware).toFixed(1)}h</b><small>Aware</small></div>
-          <div className="gx-stat"><b>{avg(conc).toFixed(1)}</b><small>Focus</small></div>
-          <div className="gx-stat"><b>{Math.round(avg(med))}m</b><small>Meditate</small></div>
-          <div className="gx-stat"><b>{defectTotals.reduce((a, b) => a + b, 0)}</b><small>Defects</small></div>
-          <div className="gx-stat"><b>{streak}</b><small>Streak</small></div>
-          <div className="gx-stat"><b>{avg(mood).toFixed(1)}</b><small>Mood</small></div>
-          <div className="gx-stat"><b>{avg(sleep).toFixed(1)}h</b><small>Sleep</small></div>
-        </div>
-
         <ModeToggle
           value={section}
           onChange={(id) => setSection(id as Section)}

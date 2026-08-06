@@ -3,14 +3,6 @@ import { useLocation } from 'wouter';
 import { Shell } from '@/components/Shell';
 import { ModeToggle } from '@/components/ModeToggle';
 import { useStore } from '@/context/StoreContext';
-import { IMAGES } from '@/lib/types';
-
-const GUIDES = [
-  { id: 'morning', title: 'Morning', img: IMAGES.dawn, q: 'sleep dreams practice' },
-  { id: 'day', title: 'Day review', img: IMAGES.day, q: 'divinity study tongue service chastity diet mood mantra defect' },
-  { id: 'night', title: 'Before bed', img: IMAGES.night, q: 'concentration meditation retrospect virtue obstacle' },
-  { id: 'summary', title: 'Summary', img: IMAGES.sum, q: 'aware mechanical energy tomorrow' },
-];
 
 type ResultTab = 'guides' | 'ledger';
 
@@ -23,36 +15,44 @@ export function SearchPage() {
 
   const results = useMemo(() => {
     const s = q.trim().toLowerCase();
-    if (!s) return { guides: GUIDES, entries: [] as { date: string; snip: string }[], notes: [] as { id: string; title: string; snip: string }[], psyche: false };
-    const guides = GUIDES.filter((g) => g.title.toLowerCase().includes(s) || g.q.includes(s) || 'glorian spiritual diary sivananda'.includes(s));
     const entries: { date: string; snip: string }[] = [];
     Object.entries(user?.ledger || {}).forEach(([date, row]) => {
       const blob = JSON.stringify(row).toLowerCase();
-      if (blob.includes(s) || date.includes(s)) {
+      if (!s || blob.includes(s) || date.includes(s)) {
         const vals = Object.values(row).filter((v) => typeof v === 'string' && v).join(' · ');
         entries.push({ date, snip: vals.slice(0, 120) || 'Logged day' });
       }
     });
     entries.sort((a, b) => b.date.localeCompare(a.date));
     const notes = (user?.notes || [])
-      .filter((n) => `${n.title} ${n.body} ${n.tag}`.toLowerCase().includes(s))
+      .filter((n) => !s || `${n.title} ${n.body} ${n.tag}`.toLowerCase().includes(s))
       .map((n) => ({ id: n.id, title: n.title || 'Untitled', snip: (n.body || '').slice(0, 100) }));
-    const psyche = 'numerology chaldean tarot planet astrology psyche'.includes(s) || JSON.stringify(user?.profile || {}).toLowerCase().includes(s);
-    return { guides, entries, notes, psyche };
+    const psyche = !s || 'numerology chaldean tarot planet astrology psyche'.includes(s) || JSON.stringify(user?.profile || {}).toLowerCase().includes(s);
+    const money = !s || 'money mpesa spend cash transfer'.includes(s) || (user?.money?.txs?.length || 0) > 0;
+    return { entries, notes, psyche, money };
   }, [q, user]);
 
-  const entrySlice = results.entries.slice(0, 4);
-  const noteSlice = results.notes.slice(0, 3);
+  const entrySlice = results.entries.slice(0, 6);
+  const noteSlice = results.notes.slice(0, 4);
+
+  const leftExtra = (
+    <div className="gx-left-extra">
+      <div className="gx-left-search">
+        <input
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder="Ask anything about your practice…"
+        />
+      </div>
+      <p style={{ fontSize: 11, color: 'rgba(255,255,255,.55)', marginTop: 8 }}>
+        Glorian Search — guidance, diary, notes, psyche, money.
+      </p>
+    </div>
+  );
 
   return (
-    <Shell onSearch={setQ}>
+    <Shell leftExtra={leftExtra} hideGlobalSearch>
       <div className="gx-page">
-        <h2>Glorian Search</h2>
-        <p className="sub">Search guidance, diary, notes, and psyche.</p>
-        <div className="gx-search" style={{ maxWidth: '100%', marginBottom: 10, flexShrink: 0 }}>
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Ask anything about your practice…" />
-        </div>
-
         <ModeToggle
           value={tab}
           onChange={(id) => setTab(id as ResultTab)}
@@ -64,24 +64,17 @@ export function SearchPage() {
 
         <div className="gx-fill">
           {tab === 'guides' && (
-            <>
-              {!q && (
-                <div className="gx-card" style={{ marginBottom: 10, flexShrink: 0, padding: 12 }}>
-                  <strong style={{ fontSize: 14 }}>Spiritual Diary</strong>
-                  <p style={{ fontSize: 12, color: 'var(--ink-soft)', marginTop: 4 }}>
-                    A Daily Record of Observed Facts · Glorian · Follow Sivananda — observe yourself each day.
-                  </p>
-                </div>
-              )}
-              <div className="gx-card-grid" style={{ alignContent: 'start' }}>
-                {results.guides.map((g) => (
-                  <button key={g.id} type="button" className="gx-photo-card" onClick={() => setLoc('/diary')}>
-                    <div className="ph" style={{ backgroundImage: `url(${g.img})` }} />
-                    <div className="body"><strong>{g.title}</strong><span>Open diary phase</span></div>
-                  </button>
-                ))}
+            <div className="gx-card" style={{ padding: 14 }}>
+              <strong style={{ fontSize: 14 }}>Spiritual Diary</strong>
+              <p style={{ fontSize: 12, color: 'var(--ink-soft)', marginTop: 6, lineHeight: 1.5 }}>
+                A Daily Record of Observed Facts · Glorian · Follow Sivananda — observe yourself each day.
+                Use the left panel to ask the ledger. Open Diary for Morning · Day · Night · Summary.
+              </p>
+              <div className="gx-btn-row" style={{ marginTop: 12 }}>
+                <button type="button" className="gx-btn gx-btn-primary" onClick={() => setLoc('/diary')}>Open diary</button>
+                <button type="button" className="gx-btn gx-btn-ghost" onClick={() => setLoc('/money')}>Money ledger</button>
               </div>
-            </>
+            </div>
           )}
 
           {tab === 'ledger' && (
@@ -90,6 +83,12 @@ export function SearchPage() {
                 <button type="button" className="gx-card" style={{ width: '100%', textAlign: 'left' }} onClick={() => setLoc('/psyche')}>
                   <strong style={{ fontSize: 13 }}>Psyche intelligence</strong>
                   <p style={{ fontSize: 12, color: 'var(--ink-soft)' }}>Numerology, planets, tarot, self-portrait</p>
+                </button>
+              )}
+              {results.money && (
+                <button type="button" className="gx-card" style={{ width: '100%', textAlign: 'left' }} onClick={() => setLoc('/money')}>
+                  <strong style={{ fontSize: 13 }}>Money · M-PESA</strong>
+                  <p style={{ fontSize: 12, color: 'var(--ink-soft)' }}>{user?.money?.txs?.length || 0} transactions · map & psychoanalysis</p>
                 </button>
               )}
               {noteSlice.map((n) => (
@@ -106,7 +105,7 @@ export function SearchPage() {
               ))}
               {!results.psyche && noteSlice.length === 0 && entrySlice.length === 0 && (
                 <div className="gx-card" style={{ color: 'var(--ink-soft)', fontSize: 13 }}>
-                  {q ? 'No ledger matches.' : 'Type a query to search your diary and notes.'}
+                  {q ? 'No ledger matches.' : 'Type a query in the left panel.'}
                 </div>
               )}
             </div>

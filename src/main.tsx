@@ -1,7 +1,10 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
+import { loadTheme, saveTheme } from './lib/store';
 import './styles/gnostic.css';
+
+saveTheme(loadTheme());
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

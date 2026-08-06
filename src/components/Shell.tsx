@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react';
-import { Search } from 'lucide-react';
+import { Search, Moon, Sun } from 'lucide-react';
 import { useLocation } from 'wouter';
 import { PanelNav, MobileNav } from './PanelNav';
 import { useStore } from '@/context/StoreContext';
@@ -35,6 +35,13 @@ const META: Record<string, { title: string; sub: string; photo: string; headline
     headline: <>Map your <em>inner</em> cosmos</>,
     chips: ['#NUMBERS', '#TAROT', '#PLANETS'],
   },
+  '/money': {
+    title: 'Money',
+    sub: 'M-PESA ledger · places · psychoanalysis',
+    photo: IMAGES.money,
+    headline: <>See the <em>cash</em> pulse</>,
+    chips: ['#MPESA', '#MAP', '#SPEND'],
+  },
   '/search': {
     title: 'Search',
     sub: 'Glorian guidance + your ledger',
@@ -58,16 +65,30 @@ const META: Record<string, { title: string; sub: string; photo: string; headline
   },
 };
 
-export function Shell({ children, onSearch }: { children: ReactNode; onSearch?: (q: string) => void }) {
+export function Shell({
+  children,
+  onSearch,
+  leftExtra,
+  hideGlobalSearch,
+  searchValue,
+  searchPlaceholder,
+}: {
+  children: ReactNode;
+  onSearch?: (q: string) => void;
+  leftExtra?: ReactNode;
+  hideGlobalSearch?: boolean;
+  searchValue?: string;
+  searchPlaceholder?: string;
+}) {
   const [loc, setLoc] = useLocation();
-  const { user } = useStore();
+  const { user, theme, setTheme } = useStore();
   const key = Object.keys(META).find((k) => (k === '/' ? loc === '/' : loc.startsWith(k))) || '/';
   const meta = META[key];
   const num = calcNumerology(user?.profile.dob, user?.profile.fullName || user?.name);
   const tarot = getDailyTarot(user?.profile.dob, user?.profile.fullName || user?.name);
   const ruler = getDayRuler();
   const days = Object.keys(user?.ledger || {}).length;
-  const progress = Math.min(100, days * 5 + (user?.profile.dob ? 20 : 0));
+  const progress = Math.min(100, days * 5 + (user?.profile.dob ? 20 : 0) + Math.min(20, Math.floor((user?.money?.txs?.length || 0) / 20)));
 
   return (
     <div className="gx-shell">
@@ -83,6 +104,7 @@ export function Shell({ children, onSearch }: { children: ReactNode; onSearch?: 
         </div>
         <h1>{meta.headline}</h1>
         <p className="byline">{meta.sub}</p>
+        {leftExtra}
         <div className="gx-left-foot">
           {user ? `${user.name} · ${days}d · ${ruler.emoji} ${ruler.name}${num.personalDay ? ` · PD ${num.personalDay}` : ''}` : 'Spiritual diary protocol'}
         </div>
@@ -90,20 +112,34 @@ export function Shell({ children, onSearch }: { children: ReactNode; onSearch?: 
 
       <main className="gx-right">
         <div className="gx-right-head">
-          <div className="gx-search">
-            <Search size={16} color="rgba(23,24,28,.38)" />
-            <input
-              placeholder="Search diary, notes, Glorian…"
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  const q = (e.target as HTMLInputElement).value;
-                  if (onSearch) onSearch(q);
-                  else setLoc(`/search?q=${encodeURIComponent(q)}`);
-                }
-              }}
-            />
-          </div>
+          {!hideGlobalSearch ? (
+            <div className="gx-search">
+              <Search size={16} color="rgba(23,24,28,.38)" />
+              <input
+                placeholder={searchPlaceholder || 'Search diary, notes, Glorian…'}
+                defaultValue={searchValue}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    const q = (e.target as HTMLInputElement).value;
+                    if (onSearch) onSearch(q);
+                    else setLoc(`/search?q=${encodeURIComponent(q)}`);
+                  }
+                }}
+                onChange={(e) => {
+                  if (onSearch && key === '/notes') onSearch(e.target.value);
+                }}
+              />
+            </div>
+          ) : <div />}
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <button
+              type="button"
+              className="gx-theme-btn"
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
+            >
+              {theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
+            </button>
             <span style={{ fontSize: 13, color: 'var(--ink-soft)' }}>Hi, {user?.name}</span>
             <div className="gx-avatar" style={{ width: 36, height: 36, margin: 0 }}>
               {user?.avatar ? <img src={user.avatar} alt="" /> : (user?.name?.[0] || 'G')}
@@ -111,7 +147,7 @@ export function Shell({ children, onSearch }: { children: ReactNode; onSearch?: 
           </div>
         </div>
         <div className="gx-section-label">{meta.title}</div>
-        <div className={`gx-content${key === '/diary' ? ' scrollable' : ''}`}>{children}</div>
+        <div className={`gx-content${key === '/diary' || key === '/money' ? ' scrollable' : ''}`}>{children}</div>
       </main>
       <MobileNav />
     </div>

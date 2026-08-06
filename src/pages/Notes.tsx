@@ -47,7 +47,7 @@ export function NotesPage() {
   }, [notes, activeId]);
 
   return (
-    <Shell>
+    <Shell onSearch={setQ} searchPlaceholder="Search notes…">
       <div className="gx-page">
         <div className="gx-page-head" style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'flex-start', flexWrap: 'wrap' }}>
           <div>
@@ -55,9 +55,6 @@ export function NotesPage() {
             <p className="sub">Freeform observations — autosaved.</p>
           </div>
           <button type="button" className="gx-btn gx-btn-primary" onClick={create}>New note</button>
-        </div>
-        <div className="gx-search" style={{ maxWidth: '100%', marginBottom: 8, flexShrink: 0 }}>
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search notes…" />
         </div>
         <div className="notes-mobile-toggle" style={{ flexShrink: 0 }}>
           <ModeToggle
@@ -103,7 +100,7 @@ export function NotesPage() {
                 <textarea className="body" value={active.body} placeholder="Observations, insights, teachings…" onChange={(e) => patch({ body: e.target.value })} />
                 <div className="gx-field" style={{ marginTop: 6, flexShrink: 0 }}>
                   <label>Tag</label>
-                  <input value={active.tag} placeholder="dream · study · insight…" onChange={(e) => patch({ tag: e.target.value })} />
+                  <input value={active.tag} placeholder="dream · study · insight · money…" onChange={(e) => patch({ tag: e.target.value })} />
                 </div>
                 <div className="gx-btn-row" style={{ marginTop: 6, flexShrink: 0 }}>
                   <span className="gx-pill">Autosave</span>

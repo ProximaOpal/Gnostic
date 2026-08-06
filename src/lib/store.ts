@@ -1,6 +1,32 @@
 import type { AppState, DiaryEntry, Note, Profile, User } from './types';
+import type { MoneyState } from './money/types';
 
 const STORE = 'gnostic_v1';
+const THEME_KEY = 'gnostic_theme';
+
+export function loadTheme(): 'light' | 'dark' {
+  try {
+    const t = localStorage.getItem(THEME_KEY);
+    return t === 'dark' ? 'dark' : 'light';
+  } catch {
+    return 'light';
+  }
+}
+
+export function saveTheme(theme: 'light' | 'dark') {
+  localStorage.setItem(THEME_KEY, theme);
+  document.documentElement.setAttribute('data-theme', theme);
+}
+
+export function emptyMoney(): MoneyState {
+  return {
+    txs: [],
+    chartRange: 'week',
+    tableRange: 'week',
+    progressNotes: '',
+    dark: false,
+  };
+}
 
 export function dateKey(d: Date | string = new Date()) {
   const x = d instanceof Date ? d : new Date(d);
@@ -33,6 +59,13 @@ export function ensureUser(u: User): User {
   if (!u.profile) u.profile = {};
   if (!u.ledger) u.ledger = {};
   if (!Array.isArray(u.notes)) u.notes = [];
+  if (!u.money) u.money = emptyMoney();
+  if (!u.money.txs) u.money.txs = [];
+  if (!u.money.chartRange) u.money.chartRange = 'week';
+  if (!u.money.tableRange) u.money.tableRange = 'week';
+  if (u.money.progressNotes == null) u.money.progressNotes = '';
+  if (u.progressNotes == null) u.progressNotes = '';
+  if (!u.theme) u.theme = 'light';
   return u;
 }
 

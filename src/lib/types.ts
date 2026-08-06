@@ -44,9 +44,16 @@ export type Profile = {
   critic?: string; bodyHeld?: string;
 };
 
+export type { MoneyState, MoneyTx, MoneyCategory, MoneyInsight, MoneyPlace } from './money/types';
+
+import type { MoneyState } from './money/types';
+
 export type User = {
   id: string; name: string; pass: string; avatar: string;
   ledger: Record<string, DiaryEntry>; notes: Note[]; profile: Profile;
+  money?: MoneyState;
+  theme?: 'light' | 'dark';
+  progressNotes?: string;
   createdAt: number;
 };
 
@@ -68,4 +75,5 @@ export const IMAGES = {
   sum: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=70',
   cosmos: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=1400&q=70',
   notes: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&w=900&q=70',
+  money: 'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=1400&q=70',
 };

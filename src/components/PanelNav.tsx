@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'wouter';
 import {
-  Home, BookOpen, NotebookPen, Sparkles, Search, ChartLine, UserRound,
+  Home, BookOpen, NotebookPen, Sparkles, Wallet, Search, ChartLine, UserRound,
 } from 'lucide-react';
 
 export const NAV = [
@@ -8,6 +8,7 @@ export const NAV = [
   { href: '/diary', label: 'Diary', icon: BookOpen },
   { href: '/notes', label: 'Notes', icon: NotebookPen },
   { href: '/psyche', label: 'Psyche', icon: Sparkles },
+  { href: '/money', label: 'Money', icon: Wallet },
   { href: '/search', label: 'Search', icon: Search },
   { href: '/trends', label: 'Trends', icon: ChartLine },
   { href: '/you', label: 'You', icon: UserRound },
